@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>car-management-app</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400&display=swap" rel="stylesheet"> 
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="styles/style.css">
+
+  </head>
+  <body>
+    <!-- //Header starts -->
+    <header class="bg-light">
+      <div class="container">
+        <nav class="navbar-default navbar-light bg-light align-items-center">
+          <div class="row">
+            <div class="col-md-12 mx-1">
+              <div class="row d-flex align-items-center justify-content-between">
+                <i class="fas fa-car-side mr-1" style="font-size: 100px; color: rgb(104, 136, 75);"></i>
+                <h1>Вашите автомобили</h1>
+              </div>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </header>
+    <!-- //Header ends -->
+    <div class="container mt-2">
+      <div class="row bg-light rounded p-3">
+        <div class="col-md-7">
+          <div class="basic-panel header-info">
+            <h3>Вашите автомобили:</h3>
+            <ul class="list-group" id="vehicles-list">
+
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-5">
+          <div class="basic-panel header-info">
+            <h3>Добавяне на нова кола:</h3>
+            <form>
+              <div class="form-group">
+                <input type="text" class="form-control" id="producer" aria-describedby="emailHelp" placeholder="Марка">
+              </div>
+              <div class="form-group">
+                <input type="text" class="form-control" id="model" placeholder="Модел">
+              </div>
+              <div class="form-group">
+                <input type="number" class="form-control" min="0" id="mileage" placeholder="Начален пробег">
+              </div>
+              <div class="form-group">
+                <input type="text" class="form-control" id="vin-number" placeholder="ВИН номер">
+              </div>
+              <div class="form-group">
+                <input type="text" class="form-control" id="license-plate" placeholder="Регистрационен номер">
+              </div>
+              <div class="row d-flex justify-content-end mr-0">
+                <button type="submit" class="btn btn-secondary">Създай</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <li class="list-group-item" style="display: none; cursor: pointer;" id="clone-list-item">
+
+    </li>
+
+    <script src="js/jquery-1.12.4.min.js"></script>
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>

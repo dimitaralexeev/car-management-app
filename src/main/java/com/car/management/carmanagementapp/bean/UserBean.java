@@ -17,7 +17,7 @@ public class UserBean {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private Integer id;
 	
 	@Column(name = "username", nullable = false, unique = true, length = 40)
 	private String username;
@@ -31,7 +31,7 @@ public class UserBean {
 	@Column(name = "name", length = 256)
 	private String name;
 	
-	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
 	private List<VehicleBean> vehicles;
 	
 	public UserBean() {}
@@ -47,11 +47,11 @@ public class UserBean {
 		this.email = email;
 	}
 	
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 

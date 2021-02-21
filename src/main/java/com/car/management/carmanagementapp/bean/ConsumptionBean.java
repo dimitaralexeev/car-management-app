@@ -2,6 +2,7 @@ package com.car.management.carmanagementapp.bean;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -15,23 +16,23 @@ public class ConsumptionBean {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private Integer id;
 	
-	@Column(name = "quantity", nullable = false)
+	@Column(name = "quantity", nullable = false, precision = 2)
 	private double quantity;
 	
-	@Column(name = "pricePerLiter", nullable = false)
+	@Column(name = "pricePerLiter", nullable = false, precision = 2)
 	private double pricePerLiter;
 	
-	@ManyToOne()
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "vehicle_id")
 	private VehicleBean vehicle;
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 

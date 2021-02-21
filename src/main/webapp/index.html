@@ -42,18 +42,18 @@
           </div>
         </div>
         <div class="col-md-5">
-          <form class="basic panel">
+          <form class="basic panel" id="login-form" action="login" method="POST">
             <div class="input-group">
               <div class="input-group-prepend">
                 <span class="input-group-text" id="basic-addon1"><i class="fas fa-user"></i></span>
               </div>
-              <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" id="username">
+              <input type="text" class="form-control" placeholder="Потребител" aria-label="Username" aria-describedby="basic-addon1" id="username" name="username">
             </div>
             <div class="input-group my-2">
               <div class="input-group-prepend">
                 <span class="input-group-text" id="basic-addon1"><i class="fas fa-key"></i></span>
               </div>
-              <input type="text" class="form-control" placeholder="Password" aria-label="Username" aria-describedby="basic-addon1" id="password">
+              <input type="text" class="form-control" placeholder="Парола" aria-label="Username" aria-describedby="basic-addon1" id="password" name="password">
             </div>
             <div class="row d-flex justify-content-between mx-0">
               <button type="button" class="btn btn-secondary" id="login-btn">Влез</button>
@@ -82,28 +82,28 @@
             </button>
           </div>
           <div class="modal-body bg-light">
-            <form id="register-form">
+            <form id="register-form" action="register" method="POST">
               <div class="form-group">
                   <label for="register-user">Потребителско име</label>
-                  <input type="text" class="form-control" id="register-user" placeholder="Username">
+                  <input type="text" class="form-control" id="register-user" name="username" placeholder="Потребителско име">
               </div>
               <div class="form-group">
                   <label for="register-email">E-mail</label>
-                  <input type="email" class="form-control" id="register-email" placeholder="E-mail">
+                  <input type="email" class="form-control" id="register-email" name="email" placeholder="E-mail">
               </div>
               <div class="form-group">
                   <label for="register-pass">Парола</label>
-                  <input type="password" class="form-control" id="register-pass" placeholder="Password">
+                  <input type="password" class="form-control" id="register-pass" name="password" placeholder="Парола">
               </div>
               <div class="form-group">
                   <label for="confirm-register-pass">Повторете паролата</label>
-                  <input type="password" class="form-control" id="confirm-register-pass" placeholder="Password">
+                  <input type="password" class="form-control" id="confirm-register-pass" name="repeatPassword" placeholder="Парола">
               </div>
             </form>
           </div>
           <div class="modal-footer" style="background-color: rgb(240, 240, 240);">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Затвори</button>
-            <button type="button" class="btn btn-success" id="register">Регистрирай</button>
+            <button type="submit" class="btn btn-success" id="register">Регистрирай</button>
           </div>
         </div>
       </div>

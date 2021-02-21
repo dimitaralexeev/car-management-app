@@ -19,7 +19,7 @@ public class VehicleBean {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private Integer id;
 	
 	@Column(name = "producer", nullable = false, length = 40)
 	private String producer;
@@ -36,21 +36,21 @@ public class VehicleBean {
 	@Column(name = "licensePlate", nullable = false, unique = true, length = 10)
 	private String licensePlate;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id")
 	private UserBean owner;
 	
-	@OneToMany(mappedBy = "vehicle")
+	@OneToMany(mappedBy = "vehicle", fetch = FetchType.EAGER)
 	private List<CostsBean> costs;
 	
-	@OneToMany(mappedBy = "vehicle")
+	@OneToMany(mappedBy = "vehicle", fetch = FetchType.EAGER)
 	private List<ConsumptionBean> consumption;
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
