@@ -3,16 +3,16 @@ body {
     font-family: 'Roboto Condensed', sans-serif;
 }
 
-.custom-control-input:checked ~ .custom-control-label::before{
+/* .custom-control-input:checked ~ .custom-control-label::before{
     background-color: #38ac38;
     border-color: black;
 }
-
+*/
 .btn{
     font-size: 1.25rem;
-}
+} 
 
-/*Display countries as boxes*/
+/* Display countries as boxes
 .country{
     border-radius: 0.5rem; 
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
@@ -32,14 +32,15 @@ body {
 #img-box{
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
     
-    /* height: 150px; */
-}
+    height: 150px;
+} 
+*/
 
 /*Display contries as list*/
 .list-group-item{
-    border-radius: 0.5rem;
+    border-radius: 0.25rem;
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-    background-color: white;
+    background-color: rgb(233, 224, 224);
     overflow: hidden;
 }
 
@@ -60,4 +61,12 @@ body {
 
 #box-country .row{
     margin-block: 1.5rem;
+}
+
+th {
+    font-weight: normal;
+}
+
+.collapse {
+    font-size: large;
 }

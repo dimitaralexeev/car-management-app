@@ -10,9 +10,16 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
-public class CostsBean {
+@Table(name = "costs")
+@Getter
+@Setter
+public class CostsBean{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,10 +32,10 @@ public class CostsBean {
 	private String descprition;
 	
 	@Column(name = "validity", nullable = false)
-	private int validity;
+	private Integer validity;
 	
 	@Column(name = "price", nullable = false, precision = 2)
-	private double price;
+	private Double price;
 	
 	@Column(name = "date", nullable = false)
 	private Date date;
@@ -36,61 +43,5 @@ public class CostsBean {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "vehicle_id")
 	private VehicleBean vehicle;
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public String getTypeOfCost() {
-		return typeOfCost;
-	}
-
-	public void setTypeOfCost(String typeOfCost) {
-		this.typeOfCost = typeOfCost;
-	}
-
-	public String getDescprition() {
-		return descprition;
-	}
-
-	public void setDescprition(String descprition) {
-		this.descprition = descprition;
-	}
-
-	public int getValidity() {
-		return validity;
-	}
-
-	public void setValidity(int validity) {
-		this.validity = validity;
-	}
-
-	public double getPrice() {
-		return price;
-	}
-
-	public void setPrice(double price) {
-		this.price = price;
-	}
-
-	public Date getDate() {
-		return date;
-	}
-
-	public void setDate(Date date) {
-		this.date = date;
-	}
-
-	public VehicleBean getVehicle() {
-		return vehicle;
-	}
-
-	public void setVehicle(VehicleBean vehicle) {
-		this.vehicle = vehicle;
-	}
 
 }
