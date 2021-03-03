@@ -19,27 +19,27 @@ import lombok.Setter;
 @Table(name = "costs")
 @Getter
 @Setter
-public class CostsBean{
-	
+public class CostsBean {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	
+
 	@Column(name = "typeOfCost", nullable = false)
 	private String typeOfCost;
-	
+
 	@Column(name = "description", nullable = false, length = 1000)
 	private String descprition;
-	
+
 	@Column(name = "validity", nullable = false)
 	private Integer validity;
-	
+
 	@Column(name = "price", nullable = false, precision = 2)
 	private Double price;
-	
+
 	@Column(name = "date", nullable = false)
 	private Date date;
-	
+
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "vehicle_id")
 	private VehicleBean vehicle;

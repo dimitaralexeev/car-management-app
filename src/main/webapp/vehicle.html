@@ -15,9 +15,9 @@
     <link rel="stylesheet" href="styles/style.css">
 
     <script src="js/jquery-1.12.4.min.js"></script>
-    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="js/main.js"></script>
 
   </head>
   <body>
@@ -38,13 +38,10 @@
                 <a class="nav-link" href="vehicle.html">Вашите автомобили</a>
               </li>
               <li class="nav-item">
-                  <a class="nav-link" href="costs.html">Разходи</a>
-                </li>
-              <li class="nav-item">
-                <a class="nav-link" href="index.html">Изход</a>
+                <a class="nav-link" id="logoutBtn" style="cursor: pointer;">Изход</a>
               </li>
               <li class="nav-item">
-                  <a class="nav-link" href="profil.html">username</a> <!--трябва да съдържа име на потребителя-->
+                <a class="nav-link" href="profil.html" id="userNameShow">username</a> <!--трябва да съдържа име на потребителя-->
               </li>
             </ul>
           </div>
@@ -61,7 +58,6 @@
             <table class="table table-hover">
               <thead>
                 <tr>
-                  <th scope="col">#</th>
                   <th scope="col">Марка</th>
                   <th scope="col">Модел</th>
                   <th scope="col">Регистрационен номер</th>
@@ -71,7 +67,6 @@
               <tbody id="vehiclesList">
                 <tr id="cloneListItem" style="display:none; cursor: default;">
                   <td class="control" tabindex="" style="display: none;"></td>
-                  <td id="idPost"></td>
                   <td id="producerPost"></td>
                   <td id="modelPost"></td>
                   <td id="licensePlatePost"></td>
@@ -111,95 +106,90 @@
     </div>
 
     <script>
-      $(document).ready(function(){
+      getVehicles("vehicle.html");
 
-        getVehicles();
-
-        $('#addCar').click(function(){
-          addVehicle();
-          window.location.href="vehicle.html";
-        });
-
-        function deleteCarById(id){
-          $.ajax({
-            url:"/vehicle/delete",
-            method:"DELETE",
-            data : { id : id
-            },
-            complete : function(){
-              window.location.href="vehicle.html";
-            }
-          });
-        }
-
-        function addVehicle(){
-            
-            producerToSend = $('#producer').val();
-            modelToSend = $('#model').val();
-            mileageToSend = $('#mileage').val();
-            licensePlateToSend = $('#licensePlate').val();
-    
-            $.ajax({
-              url: "/vehicle/add",
-              method: "POST",
-              data : {
-                producer : producerToSend,
-                model : modelToSend,
-                mileage : mileageToSend,
-                licensePlate : licensePlateToSend
-              },
-              success : function(response){
-                 				       				     			
-              },
-              fail : function(){
-                alert("Oops, something went wrong!!!");
-              }
-              
-            })
-        }
-
-        function getVehicles(){
-          $.ajax({
-            method:"GET",
-            url:"/vehicle/all",
-            dataType:"JSON"
-            }).done(function(response){
-              postVehicle(response)
-            }).fail(function(){
-              alert("Oops, something went wrong!!!");
-            });
-        }
-
-        function postVehicle(response){
-          var counter = 0;
-          for(i in response){
-            counter ++;
-            var option = $('#cloneListItem').clone();
-            option.find('#idPost').text(counter);
-            option.find('#producerPost').text(response[i].producer);
-            option.find('#modelPost').text(compareToNull(response[i].model));
-            option.find('#licensePlatePost').text(compareToNull(response[i].licensePlate));
-            option.find('#mileagePost').text(compareToNull(response[i].startingMileage));
-            option.find('a').attr('id', response[i].id);
-
-            option.find('a').click(function(){
-              console.log($(this).prop('id'));
-              deleteCarById($(this).prop('id'));
-            });
-
-            $('#vehiclesList').append(option);
-            option.show();
-          }
-        }
-
-        function compareToNull(elementToCompare){
-          if(elementToCompare === null || elementToCompare === "" || elementToCompare === []){return "unknown"}
-          return elementToCompare;
-        } 
+      $('#addCar').click(function(){
+        addVehicle();
       });
 
-    </script>
+      //Delete vehicle from database
+      function deleteCarById(vehicle, id){
+        $.ajax({
+          url:"/delete/" + id,
+          method:"DELETE",
+          data : { id : id},
+          complete : function(response){
+            if(response.status == "401"){
+              alert(response.status.text);
+              return;
+            }
+            if(response.status == "404"){
+              alert(response.status.text);
+              return;
+            }
 
+            vehicle.remove();
+          },
+          fail:function(){
+            alert("Error");
+          }
+        });
+      }
+
+      //Add vehicle to the database
+      function addVehicle(){
+            
+        producerToSend = $('#producer').val();
+        modelToSend = $('#model').val();
+        mileageToSend = $('#mileage').val();
+        licensePlateToSend = $('#licensePlate').val();
+    
+        $.ajax({
+          url: "/vehicle/add",
+          method: "POST",
+          data : {
+            producer : producerToSend,
+            model : modelToSend,
+            mileage : mileageToSend,
+            licensePlate : licensePlateToSend
+          },
+          success : function(response){
+            if(response.includes("Error:")){
+              alert(response);
+            }
+            $.ajax({
+              url:"/vehicle/" + response,
+              method:"GET"
+            }).done(function(data){
+              postVehicle(data);
+            })       	  			       				     			
+          },
+          fail : function(){
+            alert("Error!");
+          }
+              
+        });
+      }
+
+      function postVehicle(response){
+          var html = $('#cloneListItem').clone();
+          //html.find('#idPost').text(counter);
+          html.find('#producerPost').text(response.producer);
+          html.find('#modelPost').text(compareToNull(response.model));
+          html.find('#licensePlatePost').text(compareToNull(response.licensePlate));
+          html.find('#mileagePost').text(compareToNull(response.startingMileage));
+          html.find('a').attr('id', response.id);
+
+          html.find('a').click(function(){
+            console.log($(this).prop('id'));
+            deleteCarById(html, $(this).prop('id'));
+          });
+
+          $('#vehiclesList').append(html);
+          html.show();
+      } 
+
+    </script>
     <script src="js/main.js"></script>
   </body>
 </html>

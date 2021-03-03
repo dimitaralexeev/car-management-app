@@ -1,38 +1,77 @@
-$(document).ready(function(){
+getUsername();
 
-    // register btn click
-    $('#register-btn').click(function(){
-        $('#register-modal').modal('show');
-    });
-
-    // login click
-    function loginClick (e){
-
-        // Prevent the default submit action
-        e.preventDefault();
-    
-        var userValid = simpleValidation($('#username')),
-            passValid = simpleValidation($('#password'));
-    
-        if(userValid && passValid){
-            parent.window.location.href = "home.html";
-        }
-    }
-
-    function simpleValidation($input){
-        var valid = true,
-            value = $input.val();
-    
-            if(value.length == 0){
-                valid = false;
-                $input.closest('.form-group').find('.help-block').show();
-            }else{
-                $input.closest('.form-group').find('.help-block').hide();
+// Logout function for all pages
+$('#logoutBtn').click(function(){
+    $.ajax({
+        url:"logout",
+        method:"POST",
+        complete:function(response){
+            if(response.status == 401){
+                alert("Unauthorized error")
             }
-    
-        return valid;
-    }
+
+            openHtmlPage("index.html");
+        }
+    });
 });
+
+// Open html page function
+function openHtmlPage(path){
+    window.location.replace(path);
+}
+
+//Compare function for posting elemnts
+function compareToNull(elementToCompare){
+    if(elementToCompare === null || elementToCompare === "" || elementToCompare === []){return "unknown"}
+    return elementToCompare;
+}
+
+// Get all vehicles from the database
+function getVehicles(htmlPage){
+    switch(htmlPage){
+        case "home.html":
+            $.ajax({
+                method:"GET",
+                url:"/vehicle/all",
+                dataType:"JSON"
+                }).done(function(response){
+                    response.forEach(function(vehicle){
+                        initVehicleList(vehicle);
+                        
+                    });
+                }).fail(function(){
+                    alert("Oops, something went wrong!!!");
+                });
+            break;
+        case "vehicle.html":
+            $.ajax({
+                method:"GET",
+                url:"/vehicle/all",
+                dataType:"JSON"
+                }).done(function(response){
+                    response.forEach(function(vehicle){
+                      
+                        postVehicle(vehicle);
+                    });
+                }).fail(function(){
+                    alert("Oops, something went wrong!!!");
+                });
+            break;
+    }
+  }
+
+  function getUsername(){
+      $.ajax({
+        method:"GET",
+        url:"/user"
+      }).done(function(response){
+        if(response.status == "401"){alert(response.status.text); return;}
+        $('#userNameShow').text(response);
+      }).fail(function(){
+        
+      });
+  }
+
 
 
 

@@ -8,4 +8,5 @@ import com.car.management.carmanagementapp.bean.VehicleBean;
 @Repository
 public interface IVehicleRepository extends JpaRepository<VehicleBean, Integer>{
 	
+	
 }

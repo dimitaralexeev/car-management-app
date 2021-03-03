@@ -15,7 +15,6 @@
     <link rel="stylesheet" href="styles/style.css">
 
     <script src="js/jquery-1.12.4.min.js"></script>
-    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     
@@ -38,13 +37,10 @@
                         <a class="nav-link" href="vehicle.html">Вашите автомобили</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="costs.html">Разходи</a>
+                        <a class="nav-link" id="logoutBtn" style="cursor: pointer;">Изход</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="index.html">Изход</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="profil.html">username</a> <!--трябва да съдържа име на потребителя-->
+                        <a class="nav-link" href="profil.html" id="userNameShow">username</a> <!--трябва да съдържа име на потребителя-->
                     </li>
                 </ul>
                 </div>
@@ -66,22 +62,22 @@
                     </ul>
                 </div>
               </div>
-              <!-- Panel for entering car data -->
+              <!-- Panel for entering user data -->
               <div class="col-md-5">
                 <div class="basic-panel header-info">
                   <h3>Редактирайте вашият профил</h3>
                   <form>
                     <div class="form-group">
-                      <input type="text" class="form-control" id="producer" aria-describedby="emailHelp" placeholder="има">
+                      <input type="text" class="form-control" id="fName" placeholder="име">
                     </div>
                     <div class="form-group">
-                      <input type="text" class="form-control" id="model" placeholder="фамилия">
+                      <input type="text" class="form-control" id="lName" placeholder="фамилия">
                     </div>
                     <div class="form-group">
-                      <input type="number" class="form-control" min="0" id="mileage" placeholder="град">
+                      <input type="number" class="form-control" id="city" placeholder="град">
                     </div>
                     <div class="form-group">
-                      <input type="text" class="form-control" id="licensePlate" placeholder="адрес">
+                      <input type="text" class="form-control" id="address" placeholder="адрес">
                     </div>
                     <div class="row d-flex justify-content-end mr-0">
                       <button type="button" class="btn btn-secondary remove-post" id="addCar">Редактирай</button>

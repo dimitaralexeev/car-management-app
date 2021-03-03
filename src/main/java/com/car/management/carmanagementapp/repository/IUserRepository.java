@@ -8,4 +8,8 @@ import com.car.management.carmanagementapp.bean.UserBean;
 @Repository
 public interface IUserRepository extends JpaRepository<UserBean, Integer> {
 
+	UserBean findUserByUsernameAndPassword(String username, String password);
+
+	UserBean findByUsername(String username);
+
 }

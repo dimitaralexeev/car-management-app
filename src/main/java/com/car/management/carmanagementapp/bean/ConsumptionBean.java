@@ -17,18 +17,18 @@ import lombok.Setter;
 @Table(name = "consumption")
 @Getter
 @Setter
-public class ConsumptionBean{
-	
+public class ConsumptionBean {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	
+
 	@Column(name = "quantity", nullable = false, precision = 2)
 	private Double quantity;
-	
+
 	@Column(name = "pricePerLiter", nullable = false, precision = 2)
 	private Double pricePerLiter;
-	
+
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "vehicle_id")
 	private VehicleBean vehicle;

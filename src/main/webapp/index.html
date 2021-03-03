@@ -13,6 +13,11 @@
     <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
     <link rel="stylesheet" href="styles/style.css">
+	
+	  <script src="js/jquery-1.12.4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="js/main.js"></script>
 
   </head>
   <body>
@@ -42,7 +47,7 @@
           </div>
         </div>
         <div class="col-md-5">
-          <form class="basic panel" id="login-form" action="login" method="POST">
+          <form class="basic panel" id="loginForm" action="login" method="POST">
             <div class="input-group">
               <div class="input-group-prepend">
                 <span class="input-group-text" id="basic-addon1"><i class="fas fa-user"></i></span>
@@ -53,17 +58,18 @@
               <div class="input-group-prepend">
                 <span class="input-group-text" id="basic-addon1"><i class="fas fa-key"></i></span>
               </div>
-              <input type="text" class="form-control" placeholder="Парола" aria-label="Username" aria-describedby="basic-addon1" id="password" name="password">
+              <input type="password" class="form-control" placeholder="Парола" aria-label="Username" aria-describedby="basic-addon1" id="password" name="password">
             </div>
             <div class="row d-flex justify-content-between mx-0">
-              <button type="button" class="btn btn-secondary" id="login-btn">Влез</button>
-              <button type="button" class="btn btn-success" id="register-btn">Регистрация</button>
+              <button type="submit" class="btn btn-secondary" id="login">Влез</button>
+              <button type="button" class="btn btn-success" id="register">Регистрация</button>
             </div>
           </form>
         </div>
       </div>
     </div>
     <!-- login form ends -->
+    <!-- Picture container -->
     <div class="container mt-2"> 
       <div class="row">
         <div class="col-md-12 px-0 py-1">
@@ -72,7 +78,7 @@
       </div>
     </div>
     <!-- register modal starts -->
-    <div class="modal fade" id="register-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
           <div class="modal-header" style="background-color: rgb(240, 240, 240);">
@@ -82,38 +88,90 @@
             </button>
           </div>
           <div class="modal-body bg-light">
-            <form id="register-form" action="register" method="POST">
+            <form id="registerForm" action="register" method="POST">
               <div class="form-group">
                   <label for="register-user">Потребителско име</label>
-                  <input type="text" class="form-control" id="register-user" name="username" placeholder="Потребителско име">
+                  <input type="text" class="form-control" id="registerUser" name="username" placeholder="Потребителско име">
               </div>
               <div class="form-group">
                   <label for="register-email">E-mail</label>
-                  <input type="email" class="form-control" id="register-email" name="email" placeholder="E-mail">
+                  <input type="email" class="form-control" id="registerEmail" name="email" placeholder="E-mail">
               </div>
               <div class="form-group">
                   <label for="register-pass">Парола</label>
-                  <input type="password" class="form-control" id="register-pass" name="password" placeholder="Парола">
+                  <input type="password" class="form-control" id="registerPass" name="password" placeholder="Парола">
               </div>
               <div class="form-group">
                   <label for="confirm-register-pass">Повторете паролата</label>
-                  <input type="password" class="form-control" id="confirm-register-pass" name="repeatPassword" placeholder="Парола">
+                  <input type="password" class="form-control" id="confirmRegisterPass" name="repeatPassword" placeholder="Парола">
               </div>
             </form>
           </div>
           <div class="modal-footer" style="background-color: rgb(240, 240, 240);">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Затвори</button>
-            <button type="submit" class="btn btn-success" id="register">Регистрирай</button>
+            <button type="submit" form="registerForm" class="btn btn-success">Регистрирай</button>
           </div>
         </div>
       </div>
     </div>
     <!-- register modal ends -->
 
-    <script src="js/jquery-1.12.4.min.js"></script>
-    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <script src="js/main.js"></script>
+    <script>
+      $(document).ready(function() {
+
+        $('#register').click(function(){
+          $('#registerModal').modal();
+        });
+
+        $('#registerForm').submit(function (e){
+          e.preventDefault();
+
+          $.ajax({
+            url:"register",
+            method:"POST",
+            data:{
+              username:$('#registerUser').val(),
+              email:$('#registerEmail').val(),
+              password:$('#registerPass').val(),
+              repeatPassword:$('#confirmRegisterPass').val()
+            },
+            success:function(response){
+              if(response.includes("Error:")){
+                alert(response);
+              }else{
+                alert(response);
+                $('#registerModal').modal('hide');
+              }
+            },
+            fail:function(){
+              alert("Error!")
+            }
+          });
+        });
+
+        $('#loginForm').submit(function (e){
+          e.preventDefault();
+          
+          $.ajax({
+            url:"login",
+            method:"POST",
+            data:{
+              username:$('#username').val(),
+              password:$('#password').val()
+            },
+            success:function(response){
+              if(response.includes("Error:")){
+                alert(response);
+              }else{
+                openHtmlPage(response);
+              }
+            },
+            fail:function(response){
+              alert("Error!")
+            }
+          });
+        });
+
+      });
+    </script>
   </body>
 </html>

@@ -20,32 +20,32 @@ import lombok.Setter;
 @Table(name = "vehicle")
 @Getter
 @Setter
-public class VehicleBean{
-	
+public class VehicleBean {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	
+
 	@Column(name = "producer", nullable = false, length = 40)
 	private String producer;
-	
+
 	@Column(name = "model", nullable = false, length = 40)
 	private String model;
-	
+
 	@Column(name = "mileage", nullable = false, length = 40)
 	private Integer startingMileage;
-	
+
 	@Column(name = "licensePlate", nullable = false, unique = true, length = 10)
 	private String licensePlate;
-	
+
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id")
 	private UserBean owner;
-	
-	@OneToMany(mappedBy = "vehicle", fetch = FetchType.EAGER)
-	private List<CostsBean> costs;
-	
-	@OneToMany(mappedBy = "vehicle", fetch = FetchType.EAGER)
-	private List<ConsumptionBean> consumption;
+
+//	@OneToMany(mappedBy = "vehicle", fetch = FetchType.EAGER)
+//	private List<CostsBean> costs;
+//	
+//	@OneToMany(mappedBy = "vehicle", fetch = FetchType.EAGER)
+//	private List<ConsumptionBean> consumption;
 
 }
