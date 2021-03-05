@@ -36,7 +36,7 @@ body {
 } 
 */
 
-/*Display contries as list*/
+/* Display contries as list
 .list-group-item{
     border-radius: 0.25rem;
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
@@ -52,16 +52,16 @@ body {
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
 
-/*Display country*/
+
 #img-country{
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
     border-radius: 0.5rem;
     width: 100%;
-}
+} */
 
-#box-country .row{
+/* #box-country .row{
     margin-block: 1.5rem;
-}
+} */
 
 th {
     font-weight: normal;

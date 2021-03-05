@@ -26,8 +26,17 @@ public class ConsumptionBean {
 	@Column(name = "quantity", nullable = false, precision = 2)
 	private Double quantity;
 
-	@Column(name = "pricePerLiter", nullable = false, precision = 2)
-	private Double pricePerLiter;
+	@Column(name = "pricePerLiter", nullable = false, precision = 1)
+	private Double price;
+
+	@Column(name = "actualMileage", nullable = false)
+	private Integer actualMileage;
+	
+	@Column(name = "distance")
+	private Integer distance;
+	
+	@Column(name = "avgConsumption")
+	private Double avgConsumption;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "vehicle_id")

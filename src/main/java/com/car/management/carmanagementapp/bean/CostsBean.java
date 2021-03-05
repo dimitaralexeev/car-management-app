@@ -1,6 +1,6 @@
 package com.car.management.carmanagementapp.bean;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -38,7 +38,10 @@ public class CostsBean {
 	private Double price;
 
 	@Column(name = "date", nullable = false)
-	private Date date;
+	private LocalDate date;
+
+	@Column(name = "expiredDate")
+	private LocalDate expiredDate;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "vehicle_id")

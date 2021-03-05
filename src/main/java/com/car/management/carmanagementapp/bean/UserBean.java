@@ -20,6 +20,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * 
+ * @author Dimitar
+ *
+ */
 @Entity
 @Table(name = "user")
 @Getter

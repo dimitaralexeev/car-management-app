@@ -21,12 +21,6 @@ import com.car.management.carmanagementapp.bean.UserBean;
 @RestController
 public class UserController {
 
-//	private IUserRepository userRepository;
-//
-//	public UserController(IUserRepository userRepository) {
-//		this.userRepository = userRepository;
-//	}
-
 	@GetMapping(path = "/user")
 	public ResponseEntity<String> getUsername(HttpSession session) {
 		UserBean user = (UserBean) session.getAttribute("user");
