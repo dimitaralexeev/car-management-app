@@ -16,8 +16,11 @@ import javax.persistence.Table;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
+<<<<<<< HEAD
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+=======
+>>>>>>> a7911477d628f7f8d71d9ea3b5e07baeb1f8fcc9
 import lombok.Getter;
 import lombok.Setter;
 
@@ -46,6 +49,7 @@ public class VehicleBean {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id")
 	private UserBean owner;
+<<<<<<< HEAD
 	
 	@JsonIgnore
 	@LazyCollection(LazyCollectionOption.FALSE)
@@ -55,6 +59,15 @@ public class VehicleBean {
 	@JsonIgnore
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(mappedBy = "vehicle")	
+=======
+
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@OneToMany(mappedBy = "vehicle")
+	private List<CostsBean> costs;
+	
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@OneToMany(mappedBy = "vehicle")
+>>>>>>> a7911477d628f7f8d71d9ea3b5e07baeb1f8fcc9
 	private List<ConsumptionBean> consumption;
 
 }
