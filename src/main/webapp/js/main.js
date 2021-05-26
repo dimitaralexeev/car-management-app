@@ -9,7 +9,7 @@ $('#logoutBtn').click(function () {
             if (response.status == 401) {
                 alert("Unauthorized error")
             }
-
+            
             openHtmlPage("index.html");
         }
     });

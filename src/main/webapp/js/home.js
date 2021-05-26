@@ -1,5 +1,6 @@
 var vehicleIdToSend;
 var chosenTable;
+var expiredCostsArr;
 
 // Choose the car and type of reference from the car and references lists and add to variables - vehicleIdToSend, chosenTable
 $('#chooseCar, #chooseTable').change(function () {
@@ -169,4 +170,34 @@ function selectTypeOfCost(typeOfCost) {
       break;
   }
   return type;
+}
+
+//Check if the user has expired costs
+function getExpiredCosts(){
+  $.ajax({
+    method: "GET",
+    url: "/expiredCosts"
+  }).done(function (response) {
+      if(response.status == "401") { alert(response.status.text); return; }
+      if(response.length != 0){
+        expiredCostsArr = response;
+        console.log(expiredCostsArr);
+        $('#checkModalBtn').show();
+      }
+  }).fail(function () {
+    alert("Oops, something went wrong!!!");
+  });
+}
+
+//Post expired costs to modal
+function postExpiredCosts(response){
+  for(i in response){
+    var html = $('#expiredCostsCloneListItems').clone();
+    html.find('#expiredDate').text(compareToNull(response[i].date));
+    html.find('#typeOfCost').text(selectTypeOfCost(compareToNull(response[i].typeOfCost)));
+    html.find('#licensePlateNumber').text(compareToNull(response[i].vehicle.licensePlate));
+
+    $('#expiredCostsList').append(html);
+    html.show();
+  }
 }

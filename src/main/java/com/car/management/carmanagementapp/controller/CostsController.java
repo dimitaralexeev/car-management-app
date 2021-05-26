@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.car.management.carmanagementapp.bean.CostsBean;
 import com.car.management.carmanagementapp.bean.UserBean;
 import com.car.management.carmanagementapp.service.CostsService;
+import com.car.management.carmanagementapp.service.EventService;
 
 /**
  * @author Dimitar
@@ -29,6 +30,9 @@ public class CostsController {
 
 	@Autowired
 	private CostsService costsService;
+	
+	@Autowired
+	private EventService eventService;
 
 	@PostMapping(path = "/cost/add")
 	public ResponseEntity<Boolean> addCost(@RequestParam(value = "typeOfCost") String typeOfCost,
@@ -52,7 +56,7 @@ public class CostsController {
 		cost.setValidity(validity);
 		cost.setDescprition(descprition);
 
-		costsService.addCostToDatabasa(cost, vehicleId, date);
+		costsService.addCostToDatabase(cost, vehicleId, date);
 
 		return new ResponseEntity<>(true, HttpStatus.OK);
 	}
@@ -67,5 +71,16 @@ public class CostsController {
 			return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
 
 		return new ResponseEntity<>(costsService.getAllCosts(vehicleId), HttpStatus.OK);
+	}
+	
+	@GetMapping(path = "/expiredCosts")
+	public ResponseEntity<List<CostsBean>> getExpiredCosts(HttpSession session){
+		
+		UserBean user = (UserBean) session.getAttribute("user");
+		
+		if(user == null)
+			return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+		
+		return new ResponseEntity<>(eventService.getExpiredCosts(eventService.getUserByUsername(user.getUsername())), HttpStatus.OK);
 	}
 }

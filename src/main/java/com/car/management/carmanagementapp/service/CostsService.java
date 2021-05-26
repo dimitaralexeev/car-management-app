@@ -28,7 +28,7 @@ public class CostsService {
 	@Autowired
 	private VehicleService vehicleService;
 
-	public void addCostToDatabasa(CostsBean cost, Integer vehicleId, String date) {
+	public void addCostToDatabase(CostsBean cost, Integer vehicleId, String date) {
 
 		VehicleBean vehicle = vehicleService.findCarById(vehicleId);
 
@@ -39,7 +39,7 @@ public class CostsService {
 
 		cost.setDate(LocalDate.parse(date));
 		if (checkTypeOfCost(cost.getValidity())) {
-			cost.setExpiredDate(convertDateString(LocalDate.parse(date), cost.getValidity()));
+			cost.setExpiredDate(calculateExpiredDate(LocalDate.parse(date), cost.getValidity()));
 		}
 
 		costsRepository.saveAndFlush(cost);
@@ -59,7 +59,7 @@ public class CostsService {
 		return costs;
 	}
 
-	private LocalDate convertDateString(LocalDate date, int validity) {
+	private LocalDate calculateExpiredDate(LocalDate date, int validity) {
 
 		return date.plusMonths(validity);
 	}

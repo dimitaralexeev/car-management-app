@@ -83,7 +83,8 @@ public class VehicleController {
 			return null;
 
 		List<VehicleBean> ownerVehicles = new ArrayList<VehicleBean>();
-
+		
+		//Премести в сървиса и изикай в увента
 		for (VehicleBean vehicle : vehicleRepository.findAll()) {
 			if (vehicle.getOwner().getId() == user.getId()) {
 				ownerVehicles.add(vehicle);

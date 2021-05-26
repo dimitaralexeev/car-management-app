@@ -25,7 +25,7 @@
     integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
     crossorigin="anonymous"></script>
   <script src="js/main.js"></script>
-
+  <script src="js/home.js"></script>
 </head>
 
 <body>
@@ -60,9 +60,9 @@
   <!-- Header ends -->
   <!-- Warning panel starts -->
   <div class="container mt-2">
-    <div class="row bg-light d-flex justify-content-center px-2">
-      <h2>Гражданската ви изтича на:</h2>
-      <h2> 12.01.2020</h2>
+    <div class="row bg-light d-flex justify-content-between px-2 align-items-center">
+      <h2>Предстоящи разходи:</h2>
+      <button type="button" class="btn btn-danger btn-lg my-1" id="checkModalBtn" style="display: none;"><i class="fas fa-bell"></i></button>
     </div>
   </div>
   <!-- Warning panel ends -->
@@ -283,11 +283,43 @@
     </div>
   </div>
   <!-- cost modal ends -->
+  <!-- expired costs modal starts-->
+  <div class="modal fade" id="expiredCostsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Предстоящи разходи</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <ul class="list-group", id="expiredCostsList">
+            
+          </ul>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--expired costs modal ends-->
   <!--select car dropdown-->
   <option value="" id="optionClone"></option>
 
+  <!--Expired costs list-->
+  <li class="list-group-item" style="display: none;" id="expiredCostsCloneListItems">
+    <div class="row d-flex aligne-items-center mx-md-2 mt-md-2 ml-sd-0">
+      <p>На <span id="expiredDate">25.05.2021</span></p>
+      <p class="px-1">изтича <span id="typeOfCost">застраховка или преглед</span></p>
+      <p>за <span id="licensePlateNumber">PB1694KT</span></p>
+    </div>
+  </li>
+
   <script>
     getVehicles("home.html");
+    getExpiredCosts();
 
     $('#consumptionModalBtn').click(function () {
       $('#consumptionModal').modal('show');
@@ -295,6 +327,11 @@
 
     $('#costsModalBtn').click(function () {
       $('#costModal').modal('show');
+    });
+
+    $('#checkModalBtn').click(function () {
+      $('#expiredCostsModal').modal('show');
+      postExpiredCosts(expiredCostsArr);
     });
 
     function initVehicleList(vehiclesData) {
