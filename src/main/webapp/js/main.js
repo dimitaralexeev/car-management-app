@@ -64,7 +64,7 @@ function getUsername() {
         url: "/user"
     }).done(function (response) {
         if (response.status == "401") { alert(response.status.text); return; }
-        $('#userNameShow').text(response);
+        $('#userNameShow').text(response.username);
     }).fail(function () {
 
     });

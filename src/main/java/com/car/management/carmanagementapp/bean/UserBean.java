@@ -50,6 +50,9 @@ public class UserBean {
 	@Column(name = "lName", length = 256)
 	private String lName;
 	
+	@Column(name = "cityName", length = 256)
+	private String cityName;
+	
 	@JsonIgnore
 	@OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
 	private List<VehicleBean> vehicles;

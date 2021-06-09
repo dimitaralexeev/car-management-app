@@ -19,11 +19,21 @@ public class VehicleService {
 
 	@Autowired
 	private IVehicleRepository vehicleRepository;
-
+	
+	/**
+	 * 
+	 * @param vehicleId
+	 * @param actualMileage
+	 */
 	public void editVehicleMileage(Integer vehicleId, Integer actualMileage) {
 		vehicleRepository.getOne(vehicleId).setStartingMileage(actualMileage);
 	}
-
+	
+	/**
+	 * 
+	 * @param vehicleId
+	 * @return
+	 */
 	public VehicleBean findCarById(Integer vehicleId) {
 		return vehicleRepository.getOne(vehicleId);
 	}

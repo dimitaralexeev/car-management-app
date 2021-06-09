@@ -58,27 +58,6 @@ $('#addCost').click(function () {
   });
 });
 
-// requests for references
-$('#chooseTable').change(function () {
-  var table = $('#chooseTable').val();
-  // $('#costsCloneListItem').empty();
-  // $('#consumptionCloneListItem').empty();
-
-  getVehicle();
-
-  if (table === "consumption") {
-
-    getConsumptions();
-    return;
-  }
-
-  if (table === "cost") {
-
-    getCosts();
-    return;
-  }
-});
-
 // get consumptions data
 function getConsumptions() {
   $.ajax({
@@ -95,16 +74,12 @@ function getConsumptions() {
 // post table of consumptions
 function postConsumptions(response) {
   for (i in response) {
-    var html = $('#consumptionCloneListItem').clone();
-    html.find('#quantity').text(compareToNull(response[i].quantity));
-    // html.find('#pricePerLiter').text(compareToNull(response[i].pricePerLiter));
-    html.find('#distance').text(compareToNull(response[i].distance));
-    html.find('#avgConsumpion').text(compareToNull(response[i].avgConsumption));
-    html.find('#overalCost').text(compareToNull(response[i].price));
+    var tableRow = '<tr><td>'+ compareToNull(response[i].quantity) +'</td> <td>'+ compareToNull(response[i].price/response[i].quantity) +'</td> <td>'
+                    + compareToNull(response[i].distance) +'</td> <td>'+ compareToNull(response[i].avgConsumption) 
+                    +'</td> <td>'+ compareToNull(response[i].price) +'</td> </tr>';
 
-    $('#consumptionItemsList').prepend(html);
+    $('#consumptionItemsList').prepend(tableRow);
     $('#consumptionTable').show();
-    html.show();
   }
 }
 
@@ -124,15 +99,12 @@ function getCosts() {
 // Post table of costs
 function postCosts(response) {
   for (i in response) {
-    var html = $('#costsCloneListItem').clone();
-    html.find('#typeOfTax').text(selectTypeOfCost(compareToNull(response[i].typeOfCost)));
-    html.find('#price').text(compareToNull(response[i].price));
-    html.find('#date').text(compareToNull(response[i].date));
-    html.find('#description').text(compareToNull(response[i].descprition));
+    var tableRow = '<tr><td>'+ selectTypeOfCost(compareToNull(response[i].typeOfCost)) +'</td> <td>'
+                    + compareToNull(response[i].price) +'</td> <td>'+ compareToNull(response[i].date) 
+                    +'</td> <td>'+ compareToNull(response[i].descprition) +'</td> </tr>';
 
-    $('#costsItemsList').prepend(html)
+    $('#costsItemsList').prepend(tableRow)
     $('#costsTable').show();
-    html.show();
   }
 }
 
@@ -167,6 +139,9 @@ function selectTypeOfCost(typeOfCost) {
       break;
     case "yearCheck":
       type = "Годишен преглед";
+      break;
+    case "vignette":
+      type = "Пътна такса";
       break;
   }
   return type;

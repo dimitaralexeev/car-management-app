@@ -80,16 +80,13 @@
 
         </select>
       </div>
-      <div class="col-md-3">
-        <select id="chooseTable" class="form-control" style="cursor: pointer;">
-          <option value="overal" id="overal">Обща</option>
-          <option value="consumption" id="consumption">Разход на гориво</option>
-          <option value="cost" id="cost">Такси и ремонти</option>
-        </select>
+      <div class="col-md-3 my-2 d-flex justify-content-end">
+        <button type="button" class="btn btn-success mx-1" id="consmuptionTableBtn">Справка зареждане</button>
+        <button type="button" class="btn btn-success" id="costsTableBtn">Справка разходи</button>
       </div>
       <div class="col-md-3 my-2 d-flex justify-content-end">
-        <button type="button" class="btn btn-success mx-1" id="consumptionModalBtn">Гориво</button>
-        <button type="button" class="btn btn-success" id="costsModalBtn">Такса</button>
+        <button type="button" class="btn btn-success mx-1" id="consumptionModalBtn">Добави зареждане</button>
+        <button type="button" class="btn btn-success" id="costsModalBtn">Добави разход</button>
       </div>
     </div>
     <!-- Overal references -->
@@ -134,7 +131,7 @@
       <div class="col">
         <div class="basic-panel">
           <div class="row">
-            <h3 id="lastRefuelHeader">Справка:
+            <h3 id="lastRefuelHeader">Справка за:
               <div class="row">
                 <p id="carBrandTable" class="ml-3">
                 <p id="carModelTable" class="mx-2"></p>
@@ -154,22 +151,15 @@
             <table class="table table-hover" style="display: none;" id="consumptionTable">
               <thead>
                 <tr>
-                  <th scope="col">Количество заредено гориво в лт.</th>
-                  <!-- <th scope="col">Цена за литър в лв.</th> -->
+                  <th scope="col">Количество заредено гориво в литри</th>
+                  <th scope="col">Цена за литър в лв.</th>
                   <th scope="col">Изминато разстояние в км</th>
                   <th scope="col">Среден разход на гориво в l/100km</th>
                   <th scope="col">Обща стойност в лв.</th>
                 </tr>
               </thead>
               <tbody id="consumptionItemsList">
-                <tr id="consumptionCloneListItem">
-                  <td class="control" tabindex="" style="display: none;"></td>
-                  <td id="quantity"></td>
-                  <!-- <td id="pricePerLiter"> <span>лв</span></td> -->
-                  <td id="distance"></td>
-                  <td id="avgConsumpion"></td>
-                  <td id="overalCost"></td>
-                </tr>
+
               </tbody>
             </table>
             <!-- Table consumption ends -->
@@ -184,13 +174,7 @@
                 </tr>
               </thead>
               <tbody id="costsItemsList">
-                <tr id="costsCloneListItem">
-                  <td class="control" tabindex="" style="display: none;"></td>
-                  <td id="typeOfTax"></td>
-                  <td id="price"></td>
-                  <td id="date"></td>
-                  <td><textarea class="form-control" id="description" rows="3"></textarea></td>
-                </tr>
+
               </tbody>
             </table>
             <!-- Table costs ends -->
@@ -252,6 +236,7 @@
                 <option value="insurance" id="insurance">Застраховка</option>
                 <option value="tax" id="tax">Данък</option>
                 <option value="yearCheck" id="yearCheck">Годишен преглед</option>
+                <option value="vignette" id="vignette">Пътна такса</option>
               </select>
             </div>
             <div class="form-group">
@@ -289,9 +274,6 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLongTitle">Предстоящи разходи</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
         </div>
         <div class="modal-body">
           <ul class="list-group", id="expiredCostsList">
@@ -299,7 +281,7 @@
           </ul>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" id="closeExpiredModal">Close</button>
         </div>
       </div>
     </div>
@@ -332,6 +314,26 @@
     $('#checkModalBtn').click(function () {
       $('#expiredCostsModal').modal('show');
       postExpiredCosts(expiredCostsArr);
+    });
+
+    $('#closeExpiredModal').click(function () {
+      $('#expiredCostsList').empty();
+    });
+
+    $('#consmuptionTableBtn').click(function () {
+      $('#consumptionItemsList').empty();
+      $('#costsItemsList').empty();
+      $('#costsTable').hide();
+      getVehicle();
+      getConsumptions();
+    });
+
+    $('#costsTableBtn').click(function () {
+      $('#costsItemsList').empty();
+      $('#consumptionItemsList').empty();
+      $('#consumptionTable').hide();
+      getVehicle();
+      getCosts();
     });
 
     function initVehicleList(vehiclesData) {

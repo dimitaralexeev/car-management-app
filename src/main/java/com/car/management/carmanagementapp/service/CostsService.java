@@ -27,7 +27,13 @@ public class CostsService {
 
 	@Autowired
 	private VehicleService vehicleService;
-
+	
+	/**
+	 * 
+	 * @param cost
+	 * @param vehicleId
+	 * @param date
+	 */
 	public void addCostToDatabase(CostsBean cost, Integer vehicleId, String date) {
 
 		VehicleBean vehicle = vehicleService.findCarById(vehicleId);
@@ -38,13 +44,18 @@ public class CostsService {
 		cost.setVehicle(vehicle);
 
 		cost.setDate(LocalDate.parse(date));
-		if (checkTypeOfCost(cost.getValidity())) {
+		if (checkTypeOfCostValidity(cost.getValidity())) {
 			cost.setExpiredDate(calculateExpiredDate(LocalDate.parse(date), cost.getValidity()));
 		}
 
 		costsRepository.saveAndFlush(cost);
 	}
-
+	
+	/**
+	 * 
+	 * @param vehicleId
+	 * @return
+	 */
 	public List<CostsBean> getAllCosts(Integer vehicleId) {
 
 		List<CostsBean> costs = new ArrayList<CostsBean>();
@@ -58,13 +69,24 @@ public class CostsService {
 
 		return costs;
 	}
-
+	
+	/**
+	 * 
+	 * @param date
+	 * @param validity
+	 * @return
+	 */
 	private LocalDate calculateExpiredDate(LocalDate date, int validity) {
 
 		return date.plusMonths(validity);
 	}
-
-	private boolean checkTypeOfCost(Integer validity) {
+	
+	/**
+	 * 
+	 * @param validity
+	 * @return
+	 */
+	private boolean checkTypeOfCostValidity(Integer validity) {
 		if (validity == 0)
 			return false;
 

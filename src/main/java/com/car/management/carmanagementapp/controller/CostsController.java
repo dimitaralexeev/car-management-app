@@ -33,7 +33,18 @@ public class CostsController {
 	
 	@Autowired
 	private EventService eventService;
-
+	
+	/**
+	 * 
+	 * @param typeOfCost
+	 * @param price
+	 * @param date
+	 * @param validity
+	 * @param descprition
+	 * @param vehicleId
+	 * @param session
+	 * @return
+	 */
 	@PostMapping(path = "/cost/add")
 	public ResponseEntity<Boolean> addCost(@RequestParam(value = "typeOfCost") String typeOfCost,
 			@RequestParam(value = "price") Double price, @RequestParam(value = "date") String date,
@@ -60,7 +71,13 @@ public class CostsController {
 
 		return new ResponseEntity<>(true, HttpStatus.OK);
 	}
-
+	
+	/**
+	 * 
+	 * @param vehicleId
+	 * @param session
+	 * @return
+	 */
 	@GetMapping(path = "/costs")
 	public ResponseEntity<List<CostsBean>> getAllCostsByVehicle(@RequestParam(value = "vehicleId") Integer vehicleId,
 			HttpSession session) {
@@ -73,6 +90,11 @@ public class CostsController {
 		return new ResponseEntity<>(costsService.getAllCosts(vehicleId), HttpStatus.OK);
 	}
 	
+	/**
+	 * 
+	 * @param session
+	 * @return
+	 */
 	@GetMapping(path = "/expiredCosts")
 	public ResponseEntity<List<CostsBean>> getExpiredCosts(HttpSession session){
 		

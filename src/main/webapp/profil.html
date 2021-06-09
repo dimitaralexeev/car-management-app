@@ -64,18 +64,17 @@
         <div class="basic-panel header-info">
           <h3>Вашият профил:</h3>
           <ul class="list-group">
-            <li class="list-group-item" id="fName">Име</li>
-            <li class="list-group-item" id="lName">Фамилия</li>
+            <li class="list-group-item" id="postFirstName">Име</li>
+            <li class="list-group-item" id="postLastName">Фамилия</li>
             <li class="list-group-item" id="showUsername">Потребителско име</li>
-            <li class="list-group-item" id="town">Град</li>
-            <li class="list-group-item" id="address">Адрес</li>
+            <li class="list-group-item" id="postTown">Град</li>
           </ul>
         </div>
       </div>
       <!-- Panel for entering user data -->
       <div class="col-md-5">
         <div class="basic-panel header-info">
-          <h3>Редактирайте вашият профил</h3>
+          <h3>Редактирайте вашия профил</h3>
           <form>
             <div class="form-group">
               <input type="text" class="form-control" id="fName" placeholder="име">
@@ -86,17 +85,67 @@
             <div class="form-group">
               <input type="text" class="form-control" id="city" placeholder="град">
             </div>
-            <div class="form-group">
-              <input type="text" class="form-control" id="address" placeholder="адрес">
-            </div>
             <div class="row d-flex justify-content-end mr-0">
-              <button type="button" class="btn btn-secondary remove-post" id="addCar">Редактирай</button>
+              <button type="button" class="btn btn-secondary remove-post" id="editUser">Редактирай</button>
             </div>
           </form>
         </div>
       </div>
     </div>
   </div>
+
+  <script>
+    getUserInfo();
+
+    $('#editUser').click(function() {
+      editUserInfo();
+    });
+
+    function getUserInfo(){
+      $.ajax({
+        url: "/user",
+        method: "GET",
+        }).done(function (response) {
+
+          postUserInfo(response);
+          
+        }).fail(function () {
+          alert("No user found!")
+        });
+    }
+
+    function editUserInfo(){
+
+      $.ajax({
+        url: "/updateUser",
+        method: "PUT",
+        dataType: "JSON",
+        data: {
+          fName: $('#fName').val(),
+          lName: $('#lName').val(),
+          cityName: $('#city').val(),
+        },
+        success: function(response){
+          if (!response) {
+            alert(response.status.text);
+          }else{
+            getUserInfo();
+          }
+        },
+        fail: function () {
+          alert("Error!")
+        }
+      });
+    }
+
+    function postUserInfo(data){
+      $('#postFirstName').text(compareToNull(data.fname));
+      $('#postLastName').text(compareToNull(data.lname));
+      $('#showUsername').text(compareToNull(data.username));
+      $('#postTown').text(compareToNull(data.cityName));
+    }
+
+  </script>
   <script src="js/main.js"></script>
 </body>
 

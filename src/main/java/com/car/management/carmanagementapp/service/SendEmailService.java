@@ -31,7 +31,13 @@ public class SendEmailService {
 		props.put("mail.debug", "true");
 		return mailSender;
 	}
-
+	
+	/**
+	 * 
+	 * @param to
+	 * @param body
+	 * @param topic
+	 */
 	public void sendEmail(String to, String body, String topic) {
 		SimpleMailMessage message = new SimpleMailMessage();
 
