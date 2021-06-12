@@ -6,7 +6,11 @@ package com.car.management.carmanagementapp.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.car.management.carmanagementapp.bean.ConsumptionBean;
+import com.car.management.carmanagementapp.bean.CostsBean;
 import com.car.management.carmanagementapp.bean.VehicleBean;
+import com.car.management.carmanagementapp.repository.IConsumptionRepository;
+import com.car.management.carmanagementapp.repository.ICostsRepository;
 import com.car.management.carmanagementapp.repository.IVehicleRepository;
 
 /**
@@ -19,16 +23,22 @@ public class VehicleService {
 
 	@Autowired
 	private IVehicleRepository vehicleRepository;
-	
+
+	@Autowired
+	private IConsumptionRepository consumptionRepository;
+
+	@Autowired
+	private ICostsRepository costsRepository;
+
 	/**
 	 * 
 	 * @param vehicleId
 	 * @param actualMileage
 	 */
-	public void editVehicleMileage(Integer vehicleId, Integer actualMileage) {
-		vehicleRepository.getOne(vehicleId).setStartingMileage(actualMileage);
+	public void editVehicleDistance(Integer vehicleId, Integer actualDistance) {
+		vehicleRepository.getOne(vehicleId).setStartingMileage(actualDistance);
 	}
-	
+
 	/**
 	 * 
 	 * @param vehicleId
@@ -36,6 +46,20 @@ public class VehicleService {
 	 */
 	public VehicleBean findCarById(Integer vehicleId) {
 		return vehicleRepository.getOne(vehicleId);
+	}
+
+	public void deleteVehicleById(Integer id) {
+		VehicleBean vehicle = findCarById(id);
+
+		for (ConsumptionBean consmuption : vehicle.getConsumption()) {
+			consumptionRepository.deleteById(consmuption.getId());
+		}
+
+		for (CostsBean costs : vehicle.getCosts()) {
+			costsRepository.deleteById(costs.getId());
+		}
+
+		vehicleRepository.delete(vehicle);
 	}
 
 }

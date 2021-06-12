@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,10 +31,10 @@ public class CostsController {
 
 	@Autowired
 	private CostsService costsService;
-	
+
 	@Autowired
 	private EventService eventService;
-	
+
 	/**
 	 * 
 	 * @param typeOfCost
@@ -51,9 +52,13 @@ public class CostsController {
 			@RequestParam(value = "validity") Integer validity, @RequestParam(value = "descprition") String descprition,
 			@RequestParam(value = "vehicleId") Integer vehicleId, HttpSession session) {
 
-		if (price <= 0 || date == null || descprition == null || descprition == "")
+		if (price < 0 || date.equals(null) || descprition.equals(null) || date.equals("")
+				|| descprition.equals("") || validity < 0 || vehicleId <= 0 || typeOfCost.equals(null))
 			return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
-
+		
+		if(!typeOfCost.equals("repair") && validity.equals(0))
+			return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
+		
 		UserBean user = (UserBean) session.getAttribute("user");
 
 		if (user == null) {
@@ -71,7 +76,7 @@ public class CostsController {
 
 		return new ResponseEntity<>(true, HttpStatus.OK);
 	}
-	
+
 	/**
 	 * 
 	 * @param vehicleId
@@ -82,6 +87,9 @@ public class CostsController {
 	public ResponseEntity<List<CostsBean>> getAllCostsByVehicle(@RequestParam(value = "vehicleId") Integer vehicleId,
 			HttpSession session) {
 
+		if (vehicleId <= 0)
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+
 		UserBean user = (UserBean) session.getAttribute("user");
 
 		if (user == null)
@@ -89,20 +97,45 @@ public class CostsController {
 
 		return new ResponseEntity<>(costsService.getAllCosts(vehicleId), HttpStatus.OK);
 	}
-	
+
 	/**
 	 * 
 	 * @param session
 	 * @return
 	 */
 	@GetMapping(path = "/expiredCosts")
-	public ResponseEntity<List<CostsBean>> getExpiredCosts(HttpSession session){
-		
+	public ResponseEntity<List<CostsBean>> getExpiredCosts(HttpSession session) {
+
 		UserBean user = (UserBean) session.getAttribute("user");
-		
-		if(user == null)
+
+		if (user == null)
 			return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
-		
-		return new ResponseEntity<>(eventService.getExpiredCosts(eventService.getUserByUsername(user.getUsername())), HttpStatus.OK);
+
+		return new ResponseEntity<>(eventService.getExpiredCosts(eventService.getUserByUsername(user.getUsername())),
+				HttpStatus.OK);
+	}
+
+	/**
+	 * 
+	 * @param vehicleId
+	 * @param costId
+	 * @param session
+	 * @return
+	 */
+	@DeleteMapping(path = "/deleteCost")
+	public ResponseEntity<Boolean> deleteCostById(@RequestParam(value = "vehicleId") Integer vehicleId,
+			@RequestParam(value = "costId") Integer costId, HttpSession session) {
+
+		if (vehicleId <= 0 || costId <= 0)
+			return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
+
+		UserBean user = (UserBean) session.getAttribute("user");
+
+		if (user == null)
+			return new ResponseEntity<>(false, HttpStatus.UNAUTHORIZED);
+
+		costsService.deleteCostById(vehicleId, costId);
+
+		return new ResponseEntity<>(true, HttpStatus.OK);
 	}
 }

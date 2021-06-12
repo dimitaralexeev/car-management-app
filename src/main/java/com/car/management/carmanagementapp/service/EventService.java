@@ -27,7 +27,7 @@ public class EventService {
 	private SendEmailService sendEmailService;
 
 	private LocalDate ld = LocalDate.now();
-	
+
 	/**
 	 * 
 	 * @return
@@ -50,7 +50,7 @@ public class EventService {
 
 		return user;
 	}
-	
+
 	/**
 	 * 
 	 * @param users
@@ -86,15 +86,15 @@ public class EventService {
 		for (CostsBean cost : costs) {
 			if (cost.getExpiredDate().minusDays(2).equals(ld)) {
 
-				sendEmailService
-						.sendEmail(cost.getVehicle().getOwner().getEmail(),
-								"Your " + checkTypeOfCost(cost.getTypeOfCost()) + " for "
-										+ cost.getVehicle().getLicensePlate() + " expires on " + cost.getExpiredDate(),
-								"You have an expiring payment for " + cost.getVehicle().getLicensePlate());
+				sendEmailService.sendEmail(cost.getVehicle().getOwner().getEmail(),
+						cost.getVehicle().getOwner().getFName() + " " + cost.getVehicle().getOwner().getLName()
+								+ ", your " + checkTypeOfCost(cost.getTypeOfCost()) + " for "
+								+ cost.getVehicle().getLicensePlate() + " expires in " + cost.getExpiredDate(),
+						"You have an expiring payment for " + cost.getVehicle().getLicensePlate());
 			}
 		}
 	}
-	
+
 	/**
 	 * 
 	 * @param user
@@ -117,7 +117,7 @@ public class EventService {
 
 		return expiredCosts;
 	}
-	
+
 	/**
 	 * 
 	 * @param typeOfCost

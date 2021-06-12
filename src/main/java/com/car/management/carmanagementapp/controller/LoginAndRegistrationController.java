@@ -102,12 +102,12 @@ public class LoginAndRegistrationController {
 			@RequestParam(value = "repeatPassword") String repeatPassword) {
 
 		if (!password.equals(repeatPassword)) {
-			return "Error:Not equel passwords";
+			return "Error: Not equel passwords";
 		}
 
 		if (username == null || username.isEmpty() || password == null || password.isEmpty() || email == null
 				|| email.isEmpty()) {
-			return "Error:Empty field";
+			return "Error: Empty field";
 		}
 
 		UserBean user = new UserBean(username, hashPassword(password), email);

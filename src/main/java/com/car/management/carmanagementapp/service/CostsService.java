@@ -27,7 +27,7 @@ public class CostsService {
 
 	@Autowired
 	private VehicleService vehicleService;
-	
+
 	/**
 	 * 
 	 * @param cost
@@ -50,7 +50,7 @@ public class CostsService {
 
 		costsRepository.saveAndFlush(cost);
 	}
-	
+
 	/**
 	 * 
 	 * @param vehicleId
@@ -62,14 +62,14 @@ public class CostsService {
 
 		for (CostsBean cost : costsRepository.findAll()) {
 
-			if (vehicleId == cost.getVehicle().getId()) {
+			if (vehicleId.equals(cost.getVehicle().getId())) {
 				costs.add(cost);
 			}
 		}
 
 		return costs;
 	}
-	
+
 	/**
 	 * 
 	 * @param date
@@ -80,7 +80,7 @@ public class CostsService {
 
 		return date.plusMonths(validity);
 	}
-	
+
 	/**
 	 * 
 	 * @param validity
@@ -91,5 +91,14 @@ public class CostsService {
 			return false;
 
 		return true;
+	}
+	
+	public void deleteCostById(Integer vehicleId, Integer costId) {
+		
+		CostsBean cost = costsRepository.getOne(costId);
+		
+		if(vehicleId.equals(cost.getVehicle().getId())) {
+			costsRepository.deleteById(costId);
+		}
 	}
 }

@@ -16,6 +16,7 @@
   <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
     integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
   <link rel="stylesheet" href="styles/style.css">
+  <link rel="icon" type="image/svg" href="assets/car-side-solid.svg">
 
   <script src="js/jquery-1.12.4.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
@@ -31,31 +32,7 @@
 <body>
   <!-- Header starts -->
   <header class="bg-light" id="header">
-    <div class="container">
-      <nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-md-between pt-1 pb-1 px-0">
-        <i class="fas fa-car-side mr-1" style="font-size: 100px; color: rgb(104, 136, 75);"></i>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse flex-grow-0" id="navbarSupportedContent">
-          <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-              <a class="nav-link btn" href="home.html" id="mainPage">Главна страница</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link btn" href="vehicle.html" id="carPage">Вашите автомобили</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link btn" id="logoutBtn" style="cursor: pointer;">Изход</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link btn" href="profil.html" id="userNameShow">username</a>
-            </li>
-          </ul>
-        </div>
-      </nav>
-    </div>
+
   </header>
   <!-- Header ends -->
   <!-- Warning panel starts -->
@@ -128,22 +105,6 @@
   <!-- Tables references -->
   <div class="container mt-2">
     <div class="row bg-light rounded p-3">
-      <div class="col">
-        <div class="basic-panel">
-          <div class="row">
-            <h3 id="lastRefuelHeader">Справка за:
-              <div class="row">
-                <p id="carBrandTable" class="ml-3">
-                <p id="carModelTable" class="mx-2"></p>
-                </p>
-                <p id="licensePlateTable"></p>
-              </div>
-          </div>
-          </h3>
-        </div>
-      </div>
-    </div>
-    <div class="row bg-light rounded p-3">
       <div class="col-md-12">
         <div class="row">
           <div class="col-md-12">
@@ -151,16 +112,25 @@
             <table class="table table-hover" style="display: none;" id="consumptionTable">
               <thead>
                 <tr>
-                  <th scope="col">Количество заредено гориво в литри</th>
-                  <th scope="col">Цена за литър в лв.</th>
-                  <th scope="col">Изминато разстояние в км</th>
+                  <th scope="col">Количество заредено гориво</th>
+                  <th scope="col">Цена за литър</th>
+                  <th scope="col">Изминато разстояние</th>
                   <th scope="col">Среден разход на гориво в l/100km</th>
-                  <th scope="col">Обща стойност в лв.</th>
+                  <th scope="col">Обща стойност</th>
                 </tr>
               </thead>
               <tbody id="consumptionItemsList">
 
               </tbody>
+              <tfoot>
+                <tr>
+                  <td>Заредено гориво: <span id="totalQuantity"></span> l</td>
+                  <td></td>
+                  <td>Общо разстояние: <span id="totalDistance"></span> km</td>
+                  <td>Среден разход: <span id="totalAvgConsum"></span> l/100 km</td>
+                  <td>Обща сума: <span id="totalConsumptionPrice"></span> лв.</td>
+                </tr>
+              </tfoot>
             </table>
             <!-- Table consumption ends -->
             <!-- Table costs starts -->
@@ -176,6 +146,14 @@
               <tbody id="costsItemsList">
 
               </tbody>
+              <tfoot>
+                <tr>
+                  <td></td>
+                  <td>Обща сума: <span id="totalCostsPrice"></span> лв.</td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </tfoot>
             </table>
             <!-- Table costs ends -->
           </div>
@@ -302,7 +280,7 @@
   <script>
     getVehicles("home.html");
     getExpiredCosts();
-
+    
     $('#consumptionModalBtn').click(function () {
       $('#consumptionModal').modal('show');
     });
@@ -324,16 +302,18 @@
       $('#consumptionItemsList').empty();
       $('#costsItemsList').empty();
       $('#costsTable').hide();
+      
       getVehicle();
-      getConsumptions();
+      getConsumptions($(this).prop('id'));
     });
 
     $('#costsTableBtn').click(function () {
       $('#costsItemsList').empty();
       $('#consumptionItemsList').empty();
       $('#consumptionTable').hide();
+
       getVehicle();
-      getCosts();
+      getCosts($(this).prop('id'));
     });
 
     function initVehicleList(vehiclesData) {

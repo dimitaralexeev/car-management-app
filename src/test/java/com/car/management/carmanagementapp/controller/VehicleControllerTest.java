@@ -73,7 +73,7 @@ public class VehicleControllerTest {
 		List<VehicleBean> vehicles = new ArrayList<VehicleBean>();
 		doReturn(vehicles).when(ivr).findAll();
 		
-		vc = new VehicleController(ivr);
+		//vc = new VehicleController(ivr);
 	}
 	
 	//public void testAddVehicle

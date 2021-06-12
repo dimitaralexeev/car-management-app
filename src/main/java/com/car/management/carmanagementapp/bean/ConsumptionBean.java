@@ -29,8 +29,8 @@ public class ConsumptionBean {
 	@Column(name = "pricePerLiter", nullable = false, precision = 1)
 	private Double price;
 
-	@Column(name = "actualMileage", nullable = false)
-	private Integer actualMileage;
+	@Column(name = "actualDistance", nullable = false)
+	private Integer actualDistance;
 	
 	@Column(name = "distance")
 	private Integer distance;

@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.car.management.carmanagementapp.bean.UserBean;
 import com.car.management.carmanagementapp.bean.VehicleBean;
 import com.car.management.carmanagementapp.repository.IVehicleRepository;
+import com.car.management.carmanagementapp.service.VehicleService;
 
 /**
  * 
@@ -27,11 +29,11 @@ import com.car.management.carmanagementapp.repository.IVehicleRepository;
 @RestController
 public class VehicleController {
 
+	@Autowired
+	private VehicleService vehicleService;
+	
+	@Autowired
 	private IVehicleRepository vehicleRepository;
-
-	public VehicleController(IVehicleRepository vehicleRepository) {
-		this.vehicleRepository = vehicleRepository;
-	}
 
 	/**
 	 * 
@@ -43,10 +45,13 @@ public class VehicleController {
 	 * @return Vehicle id as a string
 	 */
 	@PostMapping(path = "/vehicle/add")
-	public String addVehicle(@RequestParam(value = "producer") String producer,
+	public ResponseEntity<Integer> addVehicle(@RequestParam(value = "producer") String producer,
 			@RequestParam(value = "model") String model, @RequestParam(value = "mileage") Integer mileage,
 			@RequestParam(value = "licensePlate") String licensePlate, HttpSession session) {
-
+		
+		if(producer.equals(null) || model.equals(null) || mileage < 0 || licensePlate.equals(null) || licensePlate.equals(""))
+			return new ResponseEntity<>(0, HttpStatus.BAD_REQUEST);
+		
 		UserBean user = (UserBean) session.getAttribute("user");
 
 		if (user != null) {
@@ -62,12 +67,12 @@ public class VehicleController {
 			vehicleBean = vehicleRepository.saveAndFlush(vehicleBean);
 
 			if (vehicleBean != null) {
-				return String.valueOf(vehicleBean.getId());
+				return new ResponseEntity<>(vehicleBean.getId(), HttpStatus.OK);
 			}
 
-			return "Error: Insert unsuccessfull";
+			return new ResponseEntity<>(0, HttpStatus.NOT_FOUND);
 		} else {
-			return "Error: No user found";
+			return new ResponseEntity<>(0, HttpStatus.UNAUTHORIZED);
 		}
 	}
 
@@ -83,8 +88,8 @@ public class VehicleController {
 			return null;
 
 		List<VehicleBean> ownerVehicles = new ArrayList<VehicleBean>();
-		
-		//Премести в сървиса и изикай в увента
+
+		// Премести в сървиса и изикай в увента
 		for (VehicleBean vehicle : vehicleRepository.findAll()) {
 			if (vehicle.getOwner().getId() == user.getId()) {
 				ownerVehicles.add(vehicle);
@@ -100,11 +105,15 @@ public class VehicleController {
 	 * @return
 	 */
 	@GetMapping(path = "/vehicle/{id}")
-	public VehicleBean getVehicle(@PathVariable Integer id, HttpSession session) {
+	public ResponseEntity<VehicleBean> getVehicle(@PathVariable Integer id, HttpSession session) {
+		
+		if(id <= 0)
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		
 		UserBean user = (UserBean) session.getAttribute("user");
 
 		if (user == null)
-			return null;
+			return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
 
 		VehicleBean ownerVehicle = vehicleRepository.findAll().stream().filter(vehicle -> vehicle.getId().equals(id))
 				.findFirst().get();
@@ -112,7 +121,7 @@ public class VehicleController {
 		if (ownerVehicle.getOwner().getId() != user.getId())
 			return null;
 
-		return ownerVehicle;
+		return new ResponseEntity<>(ownerVehicle, HttpStatus.OK);
 	}
 
 	/**
@@ -123,7 +132,10 @@ public class VehicleController {
 	 */
 	@DeleteMapping(path = "/delete/{id}")
 	public ResponseEntity<Boolean> deleteVehicle(@PathVariable(value = "id") Integer id, HttpSession session) {
-
+		
+		if(id <= 0)
+			return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
+		
 		UserBean user = (UserBean) session.getAttribute("user");
 
 		if (user == null)
@@ -135,7 +147,7 @@ public class VehicleController {
 			VehicleBean vehicle = optionalVehicle.get();
 
 			if (vehicle.getOwner().getId() == user.getId()) {
-				vehicleRepository.delete(vehicle);
+				vehicleService.deleteVehicleById(vehicle.getId());
 				return new ResponseEntity<>(true, HttpStatus.OK);
 			} else {
 				return new ResponseEntity<>(false, HttpStatus.UNAUTHORIZED);

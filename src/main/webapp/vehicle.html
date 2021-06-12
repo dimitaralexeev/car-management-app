@@ -16,6 +16,7 @@
   <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
     integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
   <link rel="stylesheet" href="styles/style.css">
+  <link rel="icon" type="image/svg" href="assets/car-side-solid.svg">
 
   <script src="js/jquery-1.12.4.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
@@ -31,32 +32,7 @@
 <body>
   <!-- Header starts -->
   <header class="bg-light" id="header">
-    <div class="container">
-      <nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-md-between pt-1 pb-1 px-0">
-        <i class="fas fa-car-side mr-1" style="font-size: 100px; color: rgb(104, 136, 75);"></i>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse flex-grow-0" id="navbarSupportedContent">
-          <ul class="navbar-nav mr-auto ">
-            <li class="nav-item">
-              <a class="nav-link" href="home.html">Главна страница</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="vehicle.html">Вашите автомобили</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" id="logoutBtn" style="cursor: pointer;">Изход</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="profil.html" id="userNameShow">username</a>
-              <!--трябва да съдържа име на потребителя-->
-            </li>
-          </ul>
-        </div>
-      </nav>
-    </div>
+
   </header>
   <!-- Header ends -->
   <!-- List of entered car/delete a car -->
@@ -114,6 +90,12 @@
       </div>
     </div>
   </div>
+  <!-- register modal ends -->
+  <!-- Error modal -->
+  <div class="modal" tabindex="-1" role="dialog" id="errorModal"></div>
+  <!-- Success modal -->
+  <div class="modal" tabindex="-1" role="dialog" id="successModal"></div>
+
 
   <script>
     getVehicles("vehicle.html");
@@ -129,16 +111,19 @@
         method: "DELETE",
         data: { id: id },
         complete: function (response) {
-          if (response.status == "401") {
+          if (response.status == 401) {
             alert(response.status.text);
             return;
           }
-          if (response.status == "404") {
+          if (response.status == 404) {
             alert(response.status.text);
             return;
           }
-
-          vehicle.remove();
+          if(response.status == 200){
+            vehicle.remove();
+            alert("Car is deleted!")
+          }
+            
         },
         fail: function () {
           alert("Error");
@@ -164,13 +149,14 @@
           licensePlate: licensePlateToSend
         },
         success: function (response) {
-          if (response.includes("Error:")) {
-            alert(response);
+          if (response == 0) {
+            alert(response.status.text);
           }
           $.ajax({
             url: "/vehicle/" + response,
             method: "GET"
           }).done(function (data) {
+            if(response == null){alert(response.status)}
             postVehicle(data);
           })
         },
@@ -190,10 +176,10 @@
       html.find('a').attr('id', response.id);
 
       html.find('a').click(function () {
-        console.log($(this).prop('id'));
+        
         deleteCarById(html, $(this).prop('id'));
       });
-
+      
       $('#vehiclesList').append(html);
       html.show();
     }

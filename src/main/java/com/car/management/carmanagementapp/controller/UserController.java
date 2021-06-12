@@ -23,10 +23,10 @@ import com.car.management.carmanagementapp.repository.IUserRepository;
 
 @RestController
 public class UserController {
-	
+
 	@Autowired
 	private IUserRepository userRepository;
-	
+
 	/**
 	 * 
 	 * @param session
@@ -34,14 +34,15 @@ public class UserController {
 	 */
 	@GetMapping(path = "/user")
 	public ResponseEntity<UserBean> getUser(HttpSession session) {
+		
 		UserBean user = (UserBean) session.getAttribute("user");
 
 		if (user == null)
 			return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
-		
+
 		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
-	
+
 	/**
 	 * 
 	 * @param fName
@@ -51,21 +52,24 @@ public class UserController {
 	 * @return
 	 */
 	@PutMapping(path = "/updateUser")
-	public ResponseEntity<Boolean> updateUserInformation(@RequestParam(value = "fName") String fName, 
-			@RequestParam(value = "lName") String lName, 
-			@RequestParam(value = "cityName") String cityName, HttpSession session){
+	public ResponseEntity<Boolean> updateUserInformation(@RequestParam(value = "fName") String fName,
+			@RequestParam(value = "lName") String lName, @RequestParam(value = "cityName") String cityName,
+			HttpSession session) {
+		
+		if(fName.equals("") || lName.equals("") || cityName.equals(""))
+			return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
 		
 		UserBean user = (UserBean) session.getAttribute("user");
-		
-		if(user == null)
+
+		if (user == null)
 			return new ResponseEntity<>(false, HttpStatus.UNAUTHORIZED);
-		
+
 		user.setFName(fName);
 		user.setLName(lName);
 		user.setCityName(cityName);
-		
+
 		user = userRepository.save(user);
-		
+
 		return new ResponseEntity<>(true, HttpStatus.OK);
 	}
 }

@@ -41,11 +41,11 @@ public class ConsumptionService {
 
 		consumption.setVehicle(vehicle);
 
-		consumption.setDistance(consumption.getActualMileage() - vehicle.getStartingMileage());
+		consumption.setDistance(consumption.getActualDistance() - vehicle.getStartingMileage());
 
 		consumption.setAvgConsumption((consumption.getQuantity() * 100) / consumption.getDistance());
 
-		vehicleService.editVehicleMileage(vehicle.getId(), consumption.getActualMileage());
+		vehicleService.editVehicleDistance(vehicle.getId(), consumption.getActualDistance());
 
 		consumptionRepository.saveAndFlush(consumption);
 	}
@@ -61,11 +61,37 @@ public class ConsumptionService {
 
 		for (ConsumptionBean consumption : consumptionRepository.findAll()) {
 
-			if (vehicleId == consumption.getVehicle().getId()) {
+			if (vehicleId.equals(consumption.getVehicle().getId())) {
 				consumptions.add(consumption);
 			}
 		}
 
 		return consumptions;
+	}
+	
+	/**
+	 * 
+	 * @param vehicleId
+	 * @param consumptionId
+	 */
+	public void deleteConsumption(Integer vehicleId, Integer consumptionId) {
+		
+		ConsumptionBean consumption = consumptionRepository.getOne(consumptionId);
+		
+		if(vehicleId.equals(consumption.getVehicle().getId())) {
+			vehicleService.editVehicleDistance(vehicleId, vehicleService.findCarById(vehicleId).getStartingMileage() - consumption.getDistance());
+			consumptionRepository.deleteById(consumptionId);
+		}
+	}
+	
+	/**
+	 * 
+	 * @param vehicleId
+	 * @return
+	 */
+	public Integer getLastDistance(Integer vehicleId) {
+		VehicleBean vehicle = vehicleService.findCarById(vehicleId);
+		
+		return vehicle.getStartingMileage();
 	}
 }

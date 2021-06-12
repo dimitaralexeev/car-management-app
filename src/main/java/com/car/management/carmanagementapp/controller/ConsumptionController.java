@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,7 +35,7 @@ public class ConsumptionController {
 	 * 
 	 * @param quantity
 	 * @param pricePerLiter
-	 * @param actualMileage
+	 * @param actualDistance
 	 * @param vehicleId
 	 * @param session
 	 * @return
@@ -42,10 +43,11 @@ public class ConsumptionController {
 	@PostMapping(path = "/consumption/add")
 	public ResponseEntity<Boolean> creatConsumption(@RequestParam(value = "quantity") Double quantity,
 			@RequestParam(value = "pricePerLiter") Double pricePerLiter,
-			@RequestParam(value = "actualMileage") Integer actualMileage,
+			@RequestParam(value = "actualMileage") Integer actualDistance,
 			@RequestParam(value = "vehicleId") Integer vehicleId, HttpSession session) {
 
-		if (quantity <= 0 || pricePerLiter <= 0 || actualMileage <= 0)
+		if (vehicleId <= 0 || quantity <= 0 || pricePerLiter <= 0 || actualDistance < 0
+				|| actualDistance <= consumptionService.getLastDistance(vehicleId))
 			return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
 
 		UserBean user = (UserBean) session.getAttribute("user");
@@ -58,7 +60,7 @@ public class ConsumptionController {
 
 		consumption.setQuantity(quantity);
 		consumption.setPrice(pricePerLiter * quantity);
-		consumption.setActualMileage(actualMileage);
+		consumption.setActualDistance(actualDistance);
 
 		consumptionService.addConsumption(consumption, vehicleId);
 
@@ -81,5 +83,19 @@ public class ConsumptionController {
 			return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
 
 		return new ResponseEntity<>(consumptionService.getAllConsumptions(vehicleId), HttpStatus.OK);
+	}
+
+	@DeleteMapping(path = "/deleteConsumption")
+	public ResponseEntity<Boolean> deleteConsumptionById(@RequestParam(value = "vehicleId") Integer vehicleId,
+			@RequestParam(value = "consumptionId") Integer consumptionId, HttpSession session) {
+
+		UserBean user = (UserBean) session.getAttribute("user");
+
+		if (user == null)
+			return new ResponseEntity<>(false, HttpStatus.UNAUTHORIZED);
+
+		consumptionService.deleteConsumption(vehicleId, consumptionId);
+
+		return new ResponseEntity<>(true, HttpStatus.OK);
 	}
 }
