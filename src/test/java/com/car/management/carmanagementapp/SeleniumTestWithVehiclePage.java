@@ -26,6 +26,7 @@ public class SeleniumTestWithVehiclePage {
 		System.setProperty("webdriver.chrome.driver", "driver/chromedriver.exe");
 	}
 	
+	
 	@Before
 	public void setup() {
 		driver = new ChromeDriver();
