@@ -47,22 +47,21 @@ public class CostsController {
 	 * @return
 	 */
 	@PostMapping(path = "/cost/add")
-	public ResponseEntity<Boolean> addCost(@RequestParam(value = "typeOfCost") String typeOfCost,
+	public String addCost(@RequestParam(value = "typeOfCost") String typeOfCost,
 			@RequestParam(value = "price") Double price, @RequestParam(value = "date") String date,
 			@RequestParam(value = "validity") Integer validity, @RequestParam(value = "descprition") String descprition,
 			@RequestParam(value = "vehicleId") Integer vehicleId, HttpSession session) {
-
-		if (price < 0 || date.equals(null) || descprition.equals(null) || date.equals("")
-				|| descprition.equals("") || validity < 0 || vehicleId <= 0 || typeOfCost.equals(null))
-			return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
 		
-		if(!typeOfCost.equals("repair") && validity.equals(0))
-			return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
+		if(price < 0)
+			return "Error: negative value";
+		
+		if(typeOfCost.equals("repair") && !validity.equals(0))
+			return "Error: repair";
 		
 		UserBean user = (UserBean) session.getAttribute("user");
 
 		if (user == null) {
-			return new ResponseEntity<>(false, HttpStatus.UNAUTHORIZED);
+			return "Error: User not found";
 		}
 
 		CostsBean cost = new CostsBean();
@@ -74,7 +73,7 @@ public class CostsController {
 
 		costsService.addCostToDatabase(cost, vehicleId, date);
 
-		return new ResponseEntity<>(true, HttpStatus.OK);
+		return "OK";
 	}
 
 	/**
@@ -86,9 +85,6 @@ public class CostsController {
 	@GetMapping(path = "/costs")
 	public ResponseEntity<List<CostsBean>> getAllCostsByVehicle(@RequestParam(value = "vehicleId") Integer vehicleId,
 			HttpSession session) {
-
-		if (vehicleId <= 0)
-			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 
 		UserBean user = (UserBean) session.getAttribute("user");
 

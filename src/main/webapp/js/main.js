@@ -23,7 +23,7 @@ function openHtmlPage(path) {
 
 //Compare function for posting elemnts
 function compareToNull(elementToCompare) {
-    if (elementToCompare === null || elementToCompare === "" || elementToCompare === []) { return "unknown" }
+    if (elementToCompare === null || elementToCompare === "" || elementToCompare === [] || elementToCompare === Infinity) { return "unknown" }
     return elementToCompare;
 }
 
@@ -102,6 +102,17 @@ function addHeaderToAllPages(){
                     +'</div>');
 
     $('#header').append(htmlHeader);
+}
+
+function emptyFieldErrorCatcher(inputdata, inputDataId){
+
+    if(!inputdata){
+        $('#' + inputDataId).popover('toggle');
+            
+        inputdata = "false";
+    }
+    
+    return inputdata;
 }
 
 

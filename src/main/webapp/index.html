@@ -63,14 +63,18 @@
               <span class="input-group-text" id="basic-addon1"><i class="fas fa-user"></i></span>
             </div>
             <input type="text" class="form-control" placeholder="Потребител" aria-label="Username"
-              aria-describedby="basic-addon1" id="username" name="username">
+              aria-describedby="basic-addon1" id="username" name="username" data-container="body" 
+              data-toggle="popover" data-trigger="focus"
+              data-placement="right" data-content="Полето е празно!">
           </div>
           <div class="input-group my-2">
             <div class="input-group-prepend">
               <span class="input-group-text" id="basic-addon1"><i class="fas fa-key"></i></span>
             </div>
             <input type="password" class="form-control" placeholder="Парола" aria-label="Username"
-              aria-describedby="basic-addon1" id="password" name="password">
+              aria-describedby="basic-addon1" id="password" name="password" data-container="body" 
+              data-toggle="popover" data-trigger="focus"
+              data-placement="right" data-content="Полето е празно!">
           </div>
           <div class="row d-flex justify-content-between mx-0">
             <button type="submit" class="btn btn-secondary" id="login">Влез</button>
@@ -104,20 +108,28 @@
           <form id="registerForm" action="register" method="POST">
             <div class="form-group">
               <label for="register-user">Потребителско име</label>
-              <input type="text" class="form-control" id="registerUser" name="username" placeholder="Потребителско име">
+              <input type="text" class="form-control" id="registerUser" name="username" placeholder="Потребителско име" data-container="body" 
+                data-toggle="popover" data-trigger="focus"
+                data-placement="right" data-content="Полето е празно!">
             </div>
             <div class="form-group">
               <label for="register-email">E-mail</label>
-              <input type="email" class="form-control" id="registerEmail" name="email" placeholder="E-mail">
+              <input type="email" class="form-control" id="registerEmail" name="email" placeholder="E-mail" data-container="body" 
+                data-toggle="popover" data-trigger="focus"
+                data-placement="right" data-content="Полето е празно!">
             </div>
             <div class="form-group">
               <label for="register-pass">Парола</label>
-              <input type="password" class="form-control" id="registerPass" name="password" placeholder="Парола">
+              <input type="password" class="form-control" id="registerPass" name="password" placeholder="Парола" data-container="body" 
+                data-toggle="popover" data-trigger="focus"
+                data-placement="right" data-content="Полето е празно!">
             </div>
             <div class="form-group">
               <label for="confirm-register-pass">Повторете паролата</label>
               <input type="password" class="form-control" id="confirmRegisterPass" name="repeatPassword"
-                placeholder="Парола">
+                placeholder="Парола" data-container="body" 
+                data-toggle="popover" data-trigger="focus"
+                data-placement="right" data-content="Полето е празно!">
             </div>
           </form>
         </div>
@@ -137,21 +149,36 @@
 
       $('#registerForm').submit(function (e) {
         e.preventDefault();
+        
+        var username = emptyFieldErrorCatcher($('#registerUser').val(), $('#registerUser').attr('id'));
+        var email = emptyFieldErrorCatcher($('#registerEmail').val(), $('#registerEmail').attr('id'));
+        var password = emptyFieldErrorCatcher($('#registerPass').val(), $('#registerPass').attr('id'));
+        var confirmPass = emptyFieldErrorCatcher($('#confirmRegisterPass').val(), $('#confirmRegisterPass').attr('id'));
+
+        if(username.includes("false") || email.includes("false") || password.includes("false") || confirmPass.includes("false")){return}
+        if(username.indexOf(' ') >= 0 || email.indexOf(' ') >= 0 || password.indexOf(' ') >= 0 || confirmPass.indexOf(' ') >= 0){
+          alert("Неправилно въведени данни!");
+          return;
+        }
 
         $.ajax({
           url: "register",
           method: "POST",
           data: {
-            username: $('#registerUser').val(),
-            email: $('#registerEmail').val(),
-            password: $('#registerPass').val(),
-            repeatPassword: $('#confirmRegisterPass').val()
+            username: username,
+            email: email,
+            password: password,
+            repeatPassword: confirmPass
           },
           success: function (response) {
-            if (response.includes("Error:")) {
-              alert(response);
+            if (response.includes("Error: Not equel passwords")) {
+              alert('Паролите не са еднакви!');
+            }else if(response.includes("Error: username")){
+              alert('Има регистриран потребител с това име!');
+            }else if(response.includes("Error: email")){
+              alert('Има регистриран потребител с този E-mail адрес!');
             } else {
-              //alert(response);
+              //alert('Профилът е създаден успешно!');
               $('#registerModal').modal('hide');
             }
           },
@@ -163,17 +190,25 @@
 
       $('#loginForm').submit(function (e) {
         e.preventDefault();
+        
+        var username = emptyFieldErrorCatcher($('#username').val(), $('#username').attr('id'));
+        var password = emptyFieldErrorCatcher($('#password').val(), $('#password').attr('id'));
+
+        if(username.includes("false") || password.includes('false')){return}
+        if(username.indexOf(' ') >= 0 || password.indexOf(' ') >= 0){
+          alert("Неправилно въведени данни!");
+        }
 
         $.ajax({
           url: "login",
           method: "POST",
           data: {
-            username: $('#username').val(),
-            password: $('#password').val()
+            username: username,
+            password: password
           },
           success: function (response) {
             if (response.includes("Error:")) {
-              alert(response);
+              alert('Въвели сте грешно потребителско име или парола!');
             } else {
               openHtmlPage(response);
             }

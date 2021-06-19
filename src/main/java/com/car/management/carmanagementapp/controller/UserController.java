@@ -56,9 +56,6 @@ public class UserController {
 			@RequestParam(value = "lName") String lName, @RequestParam(value = "cityName") String cityName,
 			HttpSession session) {
 		
-		if(fName.equals("") || lName.equals("") || cityName.equals(""))
-			return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
-		
 		UserBean user = (UserBean) session.getAttribute("user");
 
 		if (user == null)

@@ -71,16 +71,24 @@
           <h3>Добавяне на нова кола:</h3>
           <form>
             <div class="form-group">
-              <input type="text" class="form-control" id="producer" aria-describedby="emailHelp" placeholder="Марка">
+              <input type="text" class="form-control" id="producer" aria-describedby="emailHelp" placeholder="Марка" data-container="body" 
+                data-toggle="popover" data-trigger="focus"
+                data-placement="right" data-content="Полето е празно!">
             </div>
             <div class="form-group">
-              <input type="text" class="form-control" id="model" placeholder="Модел">
+              <input type="text" class="form-control" id="model" placeholder="Модел" data-container="body" 
+                data-toggle="popover" data-trigger="focus"
+                data-placement="right" data-content="Полето е празно!">
             </div>
             <div class="form-group">
-              <input type="number" class="form-control" min="0" id="mileage" placeholder="Начален пробег">
+              <input type="number" class="form-control" min="0" id="mileage" placeholder="Начален пробег" data-container="body" 
+                data-toggle="popover" data-trigger="focus"
+                data-placement="right" data-content="Полето е празно!">
             </div>
             <div class="form-group">
-              <input type="text" class="form-control" id="licensePlate" placeholder="Регистрационен номер">
+              <input type="text" class="form-control" id="licensePlate" placeholder="Регистрационен номер" data-container="body" 
+                data-toggle="popover" data-trigger="focus"
+                data-placement="right" data-content="Полето е празно!">
             </div>
             <div class="row d-flex justify-content-end mr-0">
               <button type="button" class="btn btn-secondary remove-post" id="addCar">Създай</button>
@@ -90,12 +98,20 @@
       </div>
     </div>
   </div>
-  <!-- register modal ends -->
-  <!-- Error modal -->
-  <div class="modal" tabindex="-1" role="dialog" id="errorModal"></div>
-  <!-- Success modal -->
-  <div class="modal" tabindex="-1" role="dialog" id="successModal"></div>
-
+  <!-- confirmation modal -->
+  <div class="modal fade" tabindex="-1" role="dialog" id="confirmDeleteVehicleModal" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-body">
+          <h3 class="d-flex justify-content-center">Сигурни ли сте, че искате да изтриете този автомобил?</h3>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-danger" id="confirmDeleteCarBtn">Потвърждавам</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script>
     getVehicles("vehicle.html");
@@ -121,7 +137,6 @@
           }
           if(response.status == 200){
             vehicle.remove();
-            alert("Car is deleted!")
           }
             
         },
@@ -134,10 +149,12 @@
     //Add vehicle to the database
     function addVehicle() {
 
-      producerToSend = $('#producer').val();
-      modelToSend = $('#model').val();
-      mileageToSend = $('#mileage').val();
-      licensePlateToSend = $('#licensePlate').val();
+      producerToSend = emptyFieldErrorCatcher($('#producer').val(), $('#producer').attr('id'));
+      modelToSend = emptyFieldErrorCatcher($('#model').val(), $('#model').attr('id'));
+      mileageToSend = emptyFieldErrorCatcher($('#mileage').val(), $('#mileage').attr('id'));
+      licensePlateToSend = emptyFieldErrorCatcher($('#licensePlate').val(), $('#licensePlate').attr('id'));
+
+      if(producerToSend.includes("false") || modelToSend.includes("false") || mileageToSend.includes("false") || licensePlateToSend.includes("false")){return}
 
       $.ajax({
         url: "/vehicle/add",
@@ -149,15 +166,20 @@
           licensePlate: licensePlateToSend
         },
         success: function (response) {
-          if (response == 0) {
-            alert(response.status.text);
-          }
+            if(response.includes('Error: Not found')){
+              return;
+            }else if(response.includes('Error: Already exists')){
+              alert('Има въведена кола с този регистрационен номер!');
+                return;
+            }else if(response.includes('Error: User not found')){
+              alert("Потребителят не е намерен!")
+                return;
+            }
           $.ajax({
             url: "/vehicle/" + response,
             method: "GET"
-          }).done(function (data) {
-            if(response == null){alert(response.status)}
-            postVehicle(data);
+          }).done(function (response) {
+            postVehicle(response);
           })
         },
         fail: function () {
@@ -175,9 +197,15 @@
       html.find('#mileagePost').text(compareToNull(response.startingMileage));
       html.find('a').attr('id', response.id);
 
+      var carId = response.id;
+
       html.find('a').click(function () {
-        
-        deleteCarById(html, $(this).prop('id'));
+        $('#confirmDeleteVehicleModal').modal('show');
+        $('#confirmDeleteCarBtn').click(function(){
+          
+          deleteCarById(html, carId);
+          $('#confirmDeleteVehicleModal').modal('hide');
+        });
       });
       
       $('#vehiclesList').append(html);

@@ -3,6 +3,8 @@
  */
 package com.car.management.carmanagementapp.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -61,5 +63,13 @@ public class VehicleService {
 
 		vehicleRepository.delete(vehicle);
 	}
-
+	
+	public boolean isLicensePlateExists(String licensePlate) {
+		List<VehicleBean> vehicles = vehicleRepository.findAll();
+		
+		if(vehicles.contains(vehicleRepository.findByLicensePlate(licensePlate.toUpperCase())))
+			return true;
+		
+		return false;
+	}
 }

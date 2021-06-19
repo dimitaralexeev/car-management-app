@@ -5,6 +5,7 @@ package com.car.management.carmanagementapp.controller;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
@@ -76,7 +77,7 @@ public class LoginAndRegistrationController {
 
 					httpSession.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
 				}
-
+				
 				return "home.html";
 			} catch (UsernameNotFoundException e) {
 				e.printStackTrace();
@@ -104,11 +105,12 @@ public class LoginAndRegistrationController {
 		if (!password.equals(repeatPassword)) {
 			return "Error: Not equel passwords";
 		}
-
-		if (username == null || username.isEmpty() || password == null || password.isEmpty() || email == null
-				|| email.isEmpty()) {
-			return "Error: Empty field";
-		}
+		
+		if(isUsernameOrEmailExist(username))
+			return "Error: username";
+		
+		if(isUsernameOrEmailExist(email))
+			return "Error: email";
 
 		UserBean user = new UserBean(username, hashPassword(password), email);
 		userRepository.saveAndFlush(user);
@@ -158,5 +160,15 @@ public class LoginAndRegistrationController {
 		}
 
 		return result.toString();
+	}
+	
+	private boolean isUsernameOrEmailExist(String inputField) {
+		
+		List<UserBean> users = userRepository.findAll();
+		
+		if(users.contains(userRepository.findByUsername(inputField)) || users.contains(userRepository.findByEmail(inputField)))
+			return true;
+			
+		return false;
 	}
 }

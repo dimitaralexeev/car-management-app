@@ -6,22 +6,98 @@ $('#chooseCar').change(function () {
   vehicleIdToSend = $('#chooseCar').val();
 });
 
+$('#consumptionModalBtn').click(function () {
+
+  if(!vehicleIdToSend){
+    $('#consumptionModalBtn').popover('toggle');
+    setTimeout(function(){
+      $('#consumptionModalBtn').popover('hide');
+    }, 2000);
+    return;
+  }
+
+  $('#consumptionModal').modal('show');
+});
+
+$('#costsModalBtn').click(function () {
+
+  if(!vehicleIdToSend){
+    $('#costsModalBtn').popover('toggle');
+    setTimeout(function(){
+      $('#costsModalBtn').popover('hide');
+    }, 2000);
+    return;
+  }
+
+  $('#costModal').modal('show');
+});
+
+$('#consmuptionTableBtn').click(function () {
+  $('#consumptionItemsList').empty();
+  $('#costsItemsList').empty();
+  $('#costsTable').hide();
+
+  if(!vehicleIdToSend){
+    $('#consmuptionTableBtn').popover('toggle');
+    setTimeout(function(){
+      $('#consmuptionTableBtn').popover('hide');
+    }, 2000);
+
+    return;
+  }
+
+  getVehicle();
+  getConsumptions($(this).prop('id'));
+});
+
+$('#costsTableBtn').click(function () {
+  $('#costsItemsList').empty();
+  $('#consumptionItemsList').empty();
+  $('#consumptionTable').hide();
+
+  if(!vehicleIdToSend){
+    $('#costsTableBtn').popover('toggle');
+    setTimeout(function(){
+      $('#costsTableBtn').popover('hide');
+    }, 2000);
+    return;
+  }
+
+  getVehicle();
+  getCosts($(this).prop('id'));
+});
+
 // Post request to add last refuel
 $('#addConsumption').click(function () {
+
+  var quantity = emptyFieldErrorCatcher($('#addQuantity').val(), $('#addQuantity').attr('id'));
+  var pricePerLiter = emptyFieldErrorCatcher($('#addPricePerLiter').val(), $('#addPricePerLiter').attr('id'));
+  var actualMileage = emptyFieldErrorCatcher($('#addLastMileage').val(), $('#addLastMileage').attr('id'));
+
+  if(quantity.includes("false") || pricePerLiter.includes("false") || actualMileage.includes("false")){return}
+
   $.ajax({
     url: "consumption/add",
     method: "POST",
     data: {
-      quantity: $('#addQuantity').val(),
-      pricePerLiter: $('#addPricePerLiter').val(),
-      actualMileage: $('#addLastMileage').val(),
+      quantity: quantity,
+      pricePerLiter: pricePerLiter,
+      actualMileage: actualMileage,
       vehicleId: vehicleIdToSend
     },
     success: function (response) {
-      if (!response) {
-        alert(response.status.text);
-      } else {
-        $('#consumptionModal').modal('hide');
+      switch(response) {
+        case "Error: distance":
+          alert("Не може да въведете изминато разстояние по-малко от последното изминато!");
+          return;
+        case "Error: User not found":
+          alert("Такъв потребител не е намерен!");
+          return;
+        case "Error: negative value":
+          alert("Има въведени отрицателни стойности!")
+          return;
+        default:
+          $('#consumptionModal').modal('hide');
       }
     },
     fail: function () {
@@ -32,22 +108,39 @@ $('#addConsumption').click(function () {
 
 // Post request to add last cost
 $('#addCost').click(function () {
+
+  var typeOfCoast = emptyFieldErrorCatcher($('#chooseCostType').val(), $('#chooseCostType').attr('id'));
+  var price = emptyFieldErrorCatcher($('#addPrice').val(), $('#addPrice').attr('id'));
+  var date = emptyFieldErrorCatcher($('#addDate').val(), $('#addDate').attr('id'));
+  var description = emptyFieldErrorCatcher($('#addDescription').val(), $('#addDescription').attr('id'));
+  var validity = emptyFieldErrorCatcher($('#chooseValidity').val(), $('#chooseValidity').attr('id'));
+
+  if(typeOfCoast.includes("false") || price.includes("false") || date.includes("false") || description.includes("false") || validity.includes("false")){return}
+
   $.ajax({
     url: "cost/add",
     method: "POST",
     data: {
-      typeOfCost: $('#chooseCostType').val(),
-      price: $('#addPrice').val(),
-      date: $('#addDate').val(),
-      descprition: $('#addDescription').val(),
-      validity: $('#chooseValidity').val(),
+      typeOfCost: typeOfCoast,
+      price: price,
+      date: date,
+      descprition: description,
+      validity: validity,
       vehicleId: vehicleIdToSend
     },
     success: function (response) {
-      if (!response) {
-        alert(response.status);
-      } else {
-        $('#costModal').modal('hide');
+      switch(response){
+        case "Error: negative value":
+          alert("Има въведени отрицателни стойности!")
+          return;
+        case "Error: repair":
+          alert("Опция ремонт не изисква въвеждане на валидност.");
+          return;
+        case "Error: User not found":
+          alert("Такъв потребител не е намерен!");
+          return;
+        default:
+          $('#costModal').modal('hide');
       }
     },
     fail: function () {
@@ -58,6 +151,7 @@ $('#addCost').click(function () {
 
 // get consumptions data
 function getConsumptions(btnId) {
+
   $.ajax({
     url: "/consumptions",
     method: "GET",
@@ -80,7 +174,7 @@ function postConsumptions(btnId, response) {
 
   for (i in response) {
     var tableRow = $('<tr><td>'+ compareToNull(response[i].quantity) +'</td> <td>'+ compareToNull(response[i].price/response[i].quantity) +'</td> <td>'
-                    + compareToNull(response[i].distance) +'</td> <td>'+ compareToNull(response[i].avgConsumption).toFixed(1) 
+                    + compareToNull(response[i].distance) +'</td> <td>'+ compareToNull(response[i].avgConsumption).toFixed(2)
                     +'</td> <td>'+ compareToNull(response[i].price).toFixed(2) 
                     +'</td>'+ addIconsToTablesRows(response[i].id) +'</tr>');
     
@@ -102,6 +196,7 @@ function postConsumptions(btnId, response) {
 
 // get costs data
 function getCosts(btnId) {
+
   $.ajax({
     url: "/costs",
     method: "GET",
@@ -202,15 +297,20 @@ function postExpiredCosts(response){
 
 //Parse string to html dom elements
 function editAndClickBtnsAndDeleteOrEditRow(btnId, htmlString){
+  $('#confirmDeleteBtn').attr('value', btnId);
 
   htmlString.find('.remove').click(function () {
-      if(btnId == "consmuptionTableBtn"){
+    var id = $(this).prop('id')
+    $('#confirmDeleteModal').modal('show');
+    $('#confirmDeleteBtn').click(function(){
+        
+      if($('#confirmDeleteBtn').val() == "consmuptionTableBtn"){
         $.ajax({
           url: "/deleteConsumption",
           method: "DELETE",
           data: { 
             vehicleId: vehicleIdToSend,
-            consumptionId: $(this).prop('id') 
+            consumptionId: id 
           },
           complete: function (response) {
             if (response.status == 401) {
@@ -222,7 +322,7 @@ function editAndClickBtnsAndDeleteOrEditRow(btnId, htmlString){
               return;
             }
 
-            alert("Success delete consumption!");
+            $('#confirmDeleteModal').modal('hide');
           },
           fail: function () {
             alert("Error");
@@ -234,7 +334,7 @@ function editAndClickBtnsAndDeleteOrEditRow(btnId, htmlString){
           method: "DELETE",
           data: { 
             vehicleId: vehicleIdToSend,
-            costId: $(this).prop('id') 
+            costId: id 
           },
           complete: function (response) {
             if (response.status == 401) {
@@ -245,25 +345,26 @@ function editAndClickBtnsAndDeleteOrEditRow(btnId, htmlString){
               alert(response.status.text);
               return;
             }
-            
-            alert("Success delete cost!");
+              
+            $('#confirmDeleteModal').modal('hide');
           },
           fail: function () {
             alert("Error");
           }
         });
       }
-
+  
       htmlString.remove();
     });
+  });
 
-    // html.find('.edit').click(function () {
-    //   if(btnId == "consmuptionTableBtn"){
-    //     $('#consumptionModal').modal('show');
-    //   }else{
-    //     $('#costModal').modal('show');
-    //   }
-    // });
+  // html.find('.edit').click(function () {
+  //   if(btnId == "consmuptionTableBtn"){
+  //     $('#consumptionModal').modal('show');
+  //   }else{
+  //     $('#costModal').modal('show');
+  //   }
+  // });
 
   return htmlString;
 }

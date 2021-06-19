@@ -41,19 +41,21 @@ public class ConsumptionController {
 	 * @return
 	 */
 	@PostMapping(path = "/consumption/add")
-	public ResponseEntity<Boolean> creatConsumption(@RequestParam(value = "quantity") Double quantity,
+	public String creatConsumption(@RequestParam(value = "quantity") Double quantity,
 			@RequestParam(value = "pricePerLiter") Double pricePerLiter,
 			@RequestParam(value = "actualMileage") Integer actualDistance,
 			@RequestParam(value = "vehicleId") Integer vehicleId, HttpSession session) {
 
-		if (vehicleId <= 0 || quantity <= 0 || pricePerLiter <= 0 || actualDistance < 0
-				|| actualDistance <= consumptionService.getLastDistance(vehicleId))
-			return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
+		if(quantity < 0 || pricePerLiter < 0 || actualDistance < 0)
+			return "Error: negative value";
+		
+		if (actualDistance <= consumptionService.getLastDistance(vehicleId))
+			return "Error: distance";
 
 		UserBean user = (UserBean) session.getAttribute("user");
 
 		if (user == null) {
-			return new ResponseEntity<>(false, HttpStatus.UNAUTHORIZED);
+			return "Error: User not found";
 		}
 
 		ConsumptionBean consumption = new ConsumptionBean();
@@ -64,7 +66,7 @@ public class ConsumptionController {
 
 		consumptionService.addConsumption(consumption, vehicleId);
 
-		return new ResponseEntity<>(true, HttpStatus.OK);
+		return "OK";
 	}
 
 	/**

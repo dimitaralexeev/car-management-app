@@ -45,14 +45,14 @@ public class VehicleController {
 	 * @return Vehicle id as a string
 	 */
 	@PostMapping(path = "/vehicle/add")
-	public ResponseEntity<Integer> addVehicle(@RequestParam(value = "producer") String producer,
+	public String addVehicle(@RequestParam(value = "producer") String producer,
 			@RequestParam(value = "model") String model, @RequestParam(value = "mileage") Integer mileage,
 			@RequestParam(value = "licensePlate") String licensePlate, HttpSession session) {
 		
-		if(producer.equals(null) || model.equals(null) || mileage < 0 || licensePlate.equals(null) || licensePlate.equals(""))
-			return new ResponseEntity<>(0, HttpStatus.BAD_REQUEST);
-		
 		UserBean user = (UserBean) session.getAttribute("user");
+		
+		if(vehicleService.isLicensePlateExists(licensePlate))
+			return "Error: Already exists"; 
 
 		if (user != null) {
 
@@ -67,13 +67,13 @@ public class VehicleController {
 			vehicleBean = vehicleRepository.saveAndFlush(vehicleBean);
 
 			if (vehicleBean != null) {
-				return new ResponseEntity<>(vehicleBean.getId(), HttpStatus.OK);
+				return vehicleBean.getId().toString();
 			}
 
-			return new ResponseEntity<>(0, HttpStatus.NOT_FOUND);
-		} else {
-			return new ResponseEntity<>(0, HttpStatus.UNAUTHORIZED);
+			return "Error: Not found";
 		}
+		
+		return "Error: User not found";
 	}
 
 	/**

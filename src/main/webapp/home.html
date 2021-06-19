@@ -58,47 +58,20 @@
         </select>
       </div>
       <div class="col-md-3 my-2 d-flex justify-content-end">
-        <button type="button" class="btn btn-success mx-1" id="consmuptionTableBtn">Справка зареждане</button>
-        <button type="button" class="btn btn-success" id="costsTableBtn">Справка разходи</button>
+        <button type="button" class="btn btn-success mx-1" id="consmuptionTableBtn" data-container="body" data-toggle="popover" data-trigger="manual"
+          data-placement="top" data-content="Изберете автомобил!">Справка зареждане
+        </button>
+        <button type="button" class="btn btn-success" id="costsTableBtn" data-container="body" data-toggle="popover" data-trigger="manual"
+          data-placement="top" data-content="Изберете автомобил!">Справка разходи
+        </button>
       </div>
       <div class="col-md-3 my-2 d-flex justify-content-end">
-        <button type="button" class="btn btn-success mx-1" id="consumptionModalBtn">Добави зареждане</button>
-        <button type="button" class="btn btn-success" id="costsModalBtn">Добави разход</button>
-      </div>
-    </div>
-    <!-- Overal references -->
-    <div class="row bg-light d-flex align-items-center" style="display: none; font-size:large;">
-      <div class="col-md-3 mt-3">
-        <div class="row ml-1">
-          <label for="carBrand">Автомобил:</label>
-          <p id="carBrand" class="mx-1">
-          <p id="carModel"></p>
-          </p>
-        </div>
-      </div>
-      <div class="col-md-3 mt-3">
-        <div class="row">
-          <label for="overalConsumptionCost">Разходи за гориво:</label>
-          <p class="mx-1" id="overalConsumptionCost">
-          <p>лв</p>
-          </p>
-        </div>
-      </div>
-      <div class="col-md-3 mt-3">
-        <div class="row">
-          <label for="overalTaxesPrice">Други разходи:</label>
-          <p class="mx-1" id="overalTaxesPrice">
-          <p>лв</p>
-          </p>
-        </div>
-      </div>
-      <div class="col-md-3 mt-3">
-        <div class="row">
-          <label for="overalCosts">Общи разходи:</label>
-          <p class="mx-1" id="overalCosts">
-          <p>лв</p>
-          </p>
-        </div>
+        <button type="button" class="btn btn-success mx-1" id="consumptionModalBtn" data-container="body" data-toggle="popover" data-trigger="manual"
+          data-placement="top" data-content="Изберете автомобил!">Добави зареждане
+        </button>
+        <button type="button" class="btn btn-success" id="costsModalBtn" data-container="body" data-toggle="popover" data-trigger="manual"
+          data-placement="top" data-content="Изберете автомобил!">Добави разход
+        </button>
       </div>
     </div>
   </div>
@@ -175,14 +148,20 @@
         <div class="modal-body bg-light">
           <form id="consumptionForm" action="consumption/add" method="POST">
             <div class="form-group">
-              <input type="text" class="form-control" id="addQuantity" name="quantity" placeholder="Количество гориво">
+              <input type="text" class="form-control" id="addQuantity" name="quantity" placeholder="Количество гориво" data-container="body" 
+                data-toggle="popover" data-trigger="focus"
+                data-placement="right" data-content="Полето е празно!">
             </div>
             <div class="form-group">
               <input type="text" class="form-control" id="addPricePerLiter" name="pricePerLiter"
-                placeholder="Цена за литър">
+                placeholder="Цена за литър" data-container="body" 
+                data-toggle="popover" data-trigger="focus"
+                data-placement="right" data-content="Полето е празно!">
             </div>
             <div class="form-group">
-              <input type="number" class="form-control" id="addLastMileage" name="lastMileage" placeholder="Километри">
+              <input type="number" class="form-control" id="addLastMileage" name="lastMileage" placeholder="Километри" data-container="body" 
+                data-toggle="popover" data-trigger="focus"
+                data-placement="right" data-content="Полето е празно!">
             </div>
           </form>
         </div>
@@ -208,7 +187,9 @@
         <div class="modal-body bg-light">
           <form id="costForm">
             <div class="form-group">
-              <select id="chooseCostType" class="form-control" style="cursor: pointer;">
+              <select id="chooseCostType" class="form-control" style="cursor: pointer;" data-container="body" 
+                data-toggle="popover" data-trigger="focus"
+                data-placement="right" data-content="Полето е празно!">
                 <option selected disabled>Вид на разхода</option>
                 <option value="repair" id="repair">Ремонт</option>
                 <option value="insurance" id="insurance">Застраховка</option>
@@ -218,13 +199,19 @@
               </select>
             </div>
             <div class="form-group">
-              <input type="number" class="form-control" id="addPrice" name="price" placeholder="Стойност">
+              <input type="number" class="form-control" id="addPrice" name="price" placeholder="Стойност" data-container="body" 
+                data-toggle="popover" data-trigger="focus"
+                data-placement="right" data-content="Полето е празно!">
             </div>
             <div class="form-group">
-              <input type="text" class="form-control" id="addDate" name="date" placeholder="Дата (гггг-мм-дд)">
+              <input type="text" class="form-control" id="addDate" name="date" placeholder="Дата (гггг-мм-дд)" data-container="body" 
+                data-toggle="popover" data-trigger="focus"
+                data-placement="right" data-content="Полето е празно!">
             </div>
             <div class="form-group">
-              <select id="chooseValidity" class="form-control" style="cursor: pointer;">
+              <select id="chooseValidity" class="form-control" style="cursor: pointer;" data-container="body" 
+                data-toggle="popover" data-trigger="focus"
+                data-placement="right" data-content="Полето е празно!">
                 <option selected disabled>Валидност</option>
                 <option value="3" id="threeMonths">3 месеца</option>
                 <option value="6" id="sixMonths">6 месеца</option>
@@ -233,8 +220,9 @@
               </select>
             </div>
             <div class="form-group">
-              <textarea class="form-control" id="addDescription" rows="3" name="description"
-                placeholder="Описание"></textarea>
+              <textarea class="form-control" id="addDescription" rows="3" name="description" placeholder="Описание" data-container="body" 
+                data-toggle="popover" data-trigger="focus"
+                data-placement="right" data-content="Полето е празно!"></textarea>
             </div>
           </form>
         </div>
@@ -276,18 +264,24 @@
       <p>за <span id="licensePlateNumber">PB1694KT</span></p>
     </div>
   </li>
+  <!-- Delete confirmation modal  -->
+  <div class="modal fade" tabindex="-1" role="dialog" id="confirmDeleteModal" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-body">
+          <h3 class="d-flex justify-content-center">Сигурни ли сте, че искате да изтриете този автомобил?</h3>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-danger" id="confirmDeleteBtn" value="">Потвърждавам</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script>
     getVehicles("home.html");
     getExpiredCosts();
-    
-    $('#consumptionModalBtn').click(function () {
-      $('#consumptionModal').modal('show');
-    });
-
-    $('#costsModalBtn').click(function () {
-      $('#costModal').modal('show');
-    });
 
     $('#checkModalBtn').click(function () {
       $('#expiredCostsModal').modal('show');
@@ -296,24 +290,6 @@
 
     $('#closeExpiredModal').click(function () {
       $('#expiredCostsList').empty();
-    });
-
-    $('#consmuptionTableBtn').click(function () {
-      $('#consumptionItemsList').empty();
-      $('#costsItemsList').empty();
-      $('#costsTable').hide();
-      
-      getVehicle();
-      getConsumptions($(this).prop('id'));
-    });
-
-    $('#costsTableBtn').click(function () {
-      $('#costsItemsList').empty();
-      $('#consumptionItemsList').empty();
-      $('#consumptionTable').hide();
-
-      getVehicle();
-      getCosts($(this).prop('id'));
     });
 
     function initVehicleList(vehiclesData) {

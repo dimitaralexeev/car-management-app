@@ -11,5 +11,6 @@ public interface IUserRepository extends JpaRepository<UserBean, Integer> {
 	UserBean findUserByUsernameAndPassword(String username, String password);
 
 	UserBean findByUsername(String username);
-
+	
+	UserBean findByEmail(String email);
 }
