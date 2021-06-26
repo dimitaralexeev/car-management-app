@@ -101,4 +101,8 @@ public class CostsService {
 			costsRepository.deleteById(costId);
 		}
 	}
+	
+//	public void editCostById(Integer vehicleId, Integer costId) {
+//		
+//	}
 }

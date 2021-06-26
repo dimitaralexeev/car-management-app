@@ -94,4 +94,8 @@ public class ConsumptionService {
 		
 		return vehicle.getStartingMileage();
 	}
+	
+//	public void editConsumptionById(Integer vehicleId, Integer consumptionId) {
+//		
+//	}
 }
