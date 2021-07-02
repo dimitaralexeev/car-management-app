@@ -58,6 +58,7 @@
                 <td id="licensePlatePost"></td>
                 <td id="mileagePost"></td>
                 <td>
+                  <a type="button" class="edit" id=""><i class="fas fa-pen" style="color: rgb(131, 190, 63);"></i></a>
                   <a type="button" class="remove"><i class="fa fa-trash" style="color: rgb(131, 190, 63);"></i></a>
                 </td>
               </tr>
@@ -106,8 +107,46 @@
           <h3 class="d-flex justify-content-center">Сигурни ли сте, че искате да изтриете този автомобил?</h3>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Затвори</button>
           <button type="button" class="btn btn-danger" id="confirmDeleteCarBtn">Потвърждавам</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- edit modal -->
+  <div class="modal fade" tabindex="-1" role="dialog" id="editVehicle" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: rgb(240, 240, 240);">
+          <h5 class="modal-title" id="exampleModalCenterTitle">Редактиране на автомобил</h5>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <input type="text" class="form-control" id="editProducer" aria-describedby="emailHelp" placeholder="Марка" data-container="body" 
+                data-toggle="popover" data-trigger="focus"
+                data-placement="right" data-content="Полето е празно!">
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control" id="editModel" placeholder="Модел" data-container="body" 
+                data-toggle="popover" data-trigger="focus"
+                data-placement="right" data-content="Полето е празно!">
+            </div>
+            <div class="form-group">
+              <input type="number" class="form-control" min="0" id="editMileage" placeholder="Начален пробег" data-container="body" 
+                data-toggle="popover" data-trigger="focus"
+                data-placement="right" data-content="Полето е празно!">
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control" id="editLicensePlate" placeholder="Регистрационен номер" data-container="body" 
+                data-toggle="popover" data-trigger="focus"
+                data-placement="right" data-content="Полето е празно!">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Затвори</button>
+          <button type="button" class="btn btn-success" id="confirmDeleteCarBtn">Редактирай</button>
         </div>
       </div>
     </div>
@@ -195,17 +234,23 @@
       html.find('#modelPost').text(compareToNull(response.model));
       html.find('#licensePlatePost').text(compareToNull(response.licensePlate));
       html.find('#mileagePost').text(compareToNull(response.startingMileage));
-      html.find('a').attr('id', response.id);
+      html.find('.remove').attr('id', response.id);
+      html.find('.edit').attr('id', response.id);
 
       var carId = response.id;
 
-      html.find('a').click(function () {
+      html.find('.remove').click(function () {
         $('#confirmDeleteVehicleModal').modal('show');
         $('#confirmDeleteCarBtn').click(function(){
           
           deleteCarById(html, carId);
+          //alert('Car is deleted!');
           $('#confirmDeleteVehicleModal').modal('hide');
         });
+      });
+
+      html.find('.edit').click(function(){
+        $('#editVehicle').modal('show');
       });
       
       $('#vehiclesList').append(html);

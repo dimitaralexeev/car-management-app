@@ -61,10 +61,40 @@
             <div class="form-group">
               <input type="text" class="form-control" id="city" placeholder="град">
             </div>
-            <div class="row d-flex justify-content-end mr-0">
-              <button type="button" class="btn btn-secondary remove-post" id="editUser">Редактирай</button>
+            <div class="row d-flex justify-content-between mr-0">
+              <button type="button" class="btn btn-success ml-3" id="editPass">Смяна на паролата</button>
+              <button type="button" class="btn btn-secondary remove-post" id="editUser">Редактирай</button> 
             </div>
           </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" tabindex="-1" role="dialog" id="editPassModal" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: rgb(240, 240, 240);">
+          <h5 class="modal-title" id="exampleModalCenterTitle">Смяна на паролата</h5>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <label for="oldPass">Въведете старата парола</label>
+              <input type="password" class="form-control" id="oldPass" placeholder="Стара парола">
+            </div>
+            <div class="form-group">
+              <label for="newPass">Въведете нова парола</label>
+              <input type="password" class="form-control" id="newPass" placeholder="Нова парола">
+            </div>
+            <div class="form-group">
+              <label for="confirmaNewPass">Повторете новата парола</label>
+              <input type="password" class="form-control" id="confirmaNewPass" placeholder="Нова парола">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Затвори</button>
+          <button type="button" class="btn btn-success" id="confirmChangePassBtn">Запази</button>
         </div>
       </div>
     </div>
@@ -75,6 +105,16 @@
 
     $('#editUser').click(function() {
       editUserInfo();
+    });
+
+    $('#editPass').click(function(){
+      alert("Паролата е сменена успешно!")
+      //$('#editPassModal').modal('show');
+    });
+
+    $('#confirmChangePassBtn').click(function(){
+      $('#editPassModal').modal('hide')
+      alert("Въведените нови пароли не съвпадат!")
     });
 
     function getUserInfo(){

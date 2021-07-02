@@ -173,7 +173,7 @@ function postConsumptions(btnId, response) {
   var counter = 0;
 
   for (i in response) {
-    var tableRow = $('<tr><td>'+ compareToNull(response[i].quantity) +'</td> <td>'+ compareToNull(response[i].price/response[i].quantity) +'</td> <td>'
+    var tableRow = $('<tr><td>'+ compareToNull(response[i].quantity) +'</td> <td>'+ compareToNull(response[i].price/response[i].quantity).toFixed(2) +'</td> <td>'
                     + compareToNull(response[i].distance) +'</td> <td>'+ compareToNull(response[i].avgConsumption).toFixed(2)
                     +'</td> <td>'+ compareToNull(response[i].price).toFixed(2) 
                     +'</td>'+ addIconsToTablesRows(response[i].id) +'</tr>');
@@ -371,9 +371,10 @@ function editAndClickBtnsAndDeleteOrEditRow(btnId, htmlString){
 
 //add icons for edit and delete element to the table
 function addIconsToTablesRows(id){
-  var addElement = '<td> <a type="button" class="edit" id="'+ compareToNull(id) 
-                    +'"><i class="fas fa-pen" style="color: rgb(131, 190, 63);"></i></a> <a type="button" class="remove" id="'+ compareToNull(id) 
+  var addElement = '<td> <a type="button" class="remove" id="'+ compareToNull(id) 
                     +'"><i class="fa fa-trash" style="color: rgb(131, 190, 63);"></i></a> </td>';
 
   return addElement;
 }
+// <a type="button" class="edit" id="'+ compareToNull(id) 
+// +'"><i class="fas fa-pen" style="color: rgb(131, 190, 63);"></i></a>

@@ -80,6 +80,9 @@
             <button type="submit" class="btn btn-secondary" id="login">Влез</button>
             <button type="button" class="btn btn-success" id="register">Регистрация</button>
           </div>
+          <div class="row p-0">
+            <button type="button" class="btn btn-link" style="font-size: 12pt;" id="forgottenPass">Забравена парола</button>
+          </div>
         </form>
       </div>
     </div>
@@ -139,9 +142,34 @@
       </div>
     </div>
   </div>
+  <div class="modal fade" tabindex="-1" role="dialog" id="forgottenPassModal" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-body">
+          <h3 class="d-flex justify-content-center">Въведете e-mail за потвърждение</h3>
+          <input type="email" class="form-control" id="confirmEmail" name="email" placeholder="E-mail" data-container="body" 
+                data-toggle="popover" data-trigger="focus"
+                data-placement="right" data-content="Полето е празно!">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Затвори</button>
+          <button type="button" class="btn btn-success" id="confirmEmailBtn">Изпрати</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script>
     $(document).ready(function () {
+      $('#forgottenPass').click(function(){
+        $('#forgottenPassModal').modal();
+      });
+
+      $('#confirmEmailBtn').click(function(){
+        var email = emptyFieldErrorCatcher($('#confirmEmail').val(), $('#confirmEmail').attr('id'));
+        if(email.includes("false")){return}
+        alert("Потребител с този e-mail не е регистриран в системата!");
+      });
 
       $('#register').click(function () {
         $('#registerModal').modal();

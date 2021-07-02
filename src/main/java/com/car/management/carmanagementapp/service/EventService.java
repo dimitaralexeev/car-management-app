@@ -91,6 +91,9 @@ public class EventService {
 								+ ", your " + checkTypeOfCost(cost.getTypeOfCost()) + " for "
 								+ cost.getVehicle().getLicensePlate() + " expires in " + cost.getExpiredDate(),
 						"You have an expiring payment for " + cost.getVehicle().getLicensePlate());
+//				sendEmailService.sendEmail(cost.getVehicle().getOwner().getEmail(), cost.getVehicle().getOwner().getUsername() +
+//						", your password have been changed. Your new password is: Dr57#h$gM . We recommend to replace it as soon as possible!",
+//						"Automatically genereted message from CarManagementApp");
 			}
 		}
 	}
